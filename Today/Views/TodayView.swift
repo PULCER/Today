@@ -112,7 +112,7 @@ struct TodayView: View {
         withAnimation {
             let newItem = ToDoListItem(timestamp: Date(), toDoListText: newToDoText, isCompleted: false)
             modelContext.insert(newItem)
-            newToDoText = "" 
+            newToDoText = ""
         }
     }
     
@@ -127,5 +127,4 @@ struct TodayView: View {
             }
         }
     }
-
 }

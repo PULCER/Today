@@ -1,10 +1,3 @@
-//
-//  TodayApp.swift
-//  Today
-//
-//  Created by Anthony Howell on 2/17/24.
-//
-
 import SwiftUI
 import SwiftData
 
@@ -12,7 +5,7 @@ import SwiftData
 struct TodayApp: App {
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
-            Item.self,
+            ToDoListItem.self,
         ])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 

@@ -1,52 +1,25 @@
-//
-//  ContentView.swift
-//  Today
-//
-//  Created by Anthony Howell on 2/17/24.
-//
-
 import SwiftUI
 import SwiftData
 
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
-    @Query private var items: [Item]
+    @Query private var toDoListItems: [ToDoListItem]
 
     var body: some View {
-        NavigationSplitView {
-            List {
-                ForEach(items) { item in
-                    NavigationLink {
-                        Text("Item at \(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))")
-                    } label: {
-                        Text(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))
-                    }
-                }
-                .onDelete(perform: deleteItems)
+        
+        List {
+            ForEach(toDoListItems) { item in
+                
+                Text("Item at \(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))")
+                
             }
-#if os(macOS)
-            .navigationSplitViewColumnWidth(min: 180, ideal: 200)
-#endif
-            .toolbar {
-#if os(iOS)
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    EditButton()
-                }
-#endif
-                ToolbarItem {
-                    Button(action: addItem) {
-                        Label("Add Item", systemImage: "plus")
-                    }
-                }
-            }
-        } detail: {
-            Text("Select an item")
+            .onDelete(perform: deleteItems)
         }
     }
 
     private func addItem() {
         withAnimation {
-            let newItem = Item(timestamp: Date())
+            let newItem = ToDoListItem(timestamp: Date())
             modelContext.insert(newItem)
         }
     }
@@ -54,13 +27,8 @@ struct ContentView: View {
     private func deleteItems(offsets: IndexSet) {
         withAnimation {
             for index in offsets {
-                modelContext.delete(items[index])
+                modelContext.delete(toDoListItems[index])
             }
         }
     }
-}
-
-#Preview {
-    ContentView()
-        .modelContainer(for: Item.self, inMemory: true)
 }

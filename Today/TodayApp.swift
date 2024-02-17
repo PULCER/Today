@@ -3,6 +3,9 @@ import SwiftData
 
 @main
 struct TodayApp: App {
+    
+    @StateObject var navigationViewModel = NavigationViewModel()
+    
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
             ToDoListItem.self,
@@ -19,6 +22,7 @@ struct TodayApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environmentObject(navigationViewModel)
         }
         .modelContainer(sharedModelContainer)
     }

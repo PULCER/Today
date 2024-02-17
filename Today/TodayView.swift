@@ -9,15 +9,28 @@ struct TodayView: View {
     @State private var showingAddToDo = false
 
     var body: some View {
-        VStack{
-            
+        VStack {
             Text("Today")
                 .font(.largeTitle)
                 .fontWeight(.bold)
             
             List {
                 ForEach(toDoListItems) { item in
-                    Text("Item at \(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))")
+                    HStack {
+                        VStack(alignment: .leading) {
+                            Text(item.toDoListText) 
+                            Text("Added on \(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))")
+                                .font(.caption)
+                                .foregroundColor(.gray)
+                        }
+                        Spacer()
+
+                        Button(action: {
+                            item.isCompleted.toggle()
+                        }) {
+                            Image(systemName: item.isCompleted ? "checkmark.circle.fill" : "circle")
+                        }
+                    }
                 }
                 .onDelete(perform: deleteItems)
             }
@@ -48,6 +61,36 @@ struct TodayView: View {
                                }.padding()
             }
             
+        } .sheet(isPresented: $showingAddToDo) {
+            
+            VStack {
+                TextField("Enter new task", text: $newToDoText)
+                
+                Spacer()
+                
+                HStack{
+                    
+                    Button("Discard") {
+                                  newToDoText = ""
+                                  self.showingAddToDo = false
+                              }
+                              .foregroundColor(.gray)
+                              .font(.title3)
+
+                              Spacer()
+                    
+                    Button("Save") {
+                        newToDoText = ""
+                        self.showingAddToDo = false
+                    }
+                    .foregroundColor(.gray)
+                    .font(.title3)
+                    
+                }.padding(.vertical)
+             
+            }
+            .padding()
+            .presentationDetents([.height(100)])
         }
         
     }

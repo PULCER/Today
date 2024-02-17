@@ -7,7 +7,24 @@ struct TodayView: View {
     @Query private var toDoListItems: [ToDoListItem]
     @State private var newToDoText = ""
     @State private var showingAddToDo = false
-
+    
+    private var todaysTasks: [ToDoListItem] {
+            let calendar = Calendar.current
+            let filteredItems = toDoListItems.filter { item in
+                calendar.isDate(item.timestamp, inSameDayAs: Date())
+            }
+            // Sort the filtered items here
+            return filteredItems.sorted { item1, item2 in
+                if item1.isCompleted && !item2.isCompleted {
+                    return false
+                } else if !item1.isCompleted && item2.isCompleted {
+                    return true
+                } else {
+                    return item1.timestamp < item2.timestamp
+                }
+            }
+        }
+    
     var body: some View {
         VStack {
             Text("Today")
@@ -15,13 +32,13 @@ struct TodayView: View {
                 .fontWeight(.bold)
             
             List {
-                ForEach(toDoListItems) { item in
+                ForEach(todaysTasks) { item in
                     HStack {
                         VStack(alignment: .leading) {
                             Text(item.toDoListText)
                         }
                         Spacer()
-
+                        
                         Button(action: {
                             item.isCompleted.toggle()
                         }) {
@@ -49,12 +66,12 @@ struct TodayView: View {
                         .foregroundColor(.blue)
                         .padding()
                 }
-            
+                
                 Button(action: {
-                                   navigationViewModel.currentScreen = .tomorrow
-                               }) {
-                                   Image(systemName: "chevron.forward")
-                               }.padding()
+                    navigationViewModel.currentScreen = .tomorrow
+                }) {
+                    Image(systemName: "chevron.forward")
+                }.padding()
             }
             
         }.sheet(isPresented: $showingAddToDo) {
@@ -67,13 +84,13 @@ struct TodayView: View {
                 HStack{
                     
                     Button("Discard") {
-                                  newToDoText = ""
-                                  self.showingAddToDo = false
-                              }
-                              .foregroundColor(.gray)
-                              .font(.title3)
-
-                              Spacer()
+                        newToDoText = ""
+                        self.showingAddToDo = false
+                    }
+                    .foregroundColor(.gray)
+                    .font(.title3)
+                    
+                    Spacer()
                     
                     Button("Save") {
                         addItem()
@@ -83,7 +100,7 @@ struct TodayView: View {
                     .font(.title3)
                     
                 }.padding(.vertical)
-             
+                
             }
             .padding()
             .presentationDetents([.height(100)])
@@ -92,18 +109,18 @@ struct TodayView: View {
     }
     
     private func addItem() {
-           withAnimation {
-               let newItem = ToDoListItem(timestamp: Date(), toDoListText: newToDoText, isCompleted: false)
-               modelContext.insert(newItem)
-               newToDoText = "" // Reset the text field after adding
-           }
-       }
-
-       private func deleteItems(offsets: IndexSet) {
-           withAnimation {
-               for index in offsets {
-                   modelContext.delete(toDoListItems[index])
-               }
-           }
-       }
+        withAnimation {
+            let newItem = ToDoListItem(timestamp: Date(), toDoListText: newToDoText, isCompleted: false)
+            modelContext.insert(newItem)
+            newToDoText = "" // Reset the text field after adding
+        }
+    }
+    
+    private func deleteItems(offsets: IndexSet) {
+        withAnimation {
+            for index in offsets {
+                modelContext.delete(toDoListItems[index])
+            }
+        }
+    }
 }

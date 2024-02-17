@@ -112,15 +112,20 @@ struct TodayView: View {
         withAnimation {
             let newItem = ToDoListItem(timestamp: Date(), toDoListText: newToDoText, isCompleted: false)
             modelContext.insert(newItem)
-            newToDoText = "" // Reset the text field after adding
+            newToDoText = "" 
         }
     }
     
     private func deleteItems(offsets: IndexSet) {
         withAnimation {
-            for index in offsets {
-                modelContext.delete(toDoListItems[index])
+            offsets.forEach { offset in
+                let idToDelete = todaysTasks[offset].id
+                if let indexToDelete = toDoListItems.firstIndex(where: { $0.id == idToDelete }) {
+                    let itemToDelete = toDoListItems[indexToDelete]
+                    modelContext.delete(itemToDelete)
+                }
             }
         }
     }
+
 }

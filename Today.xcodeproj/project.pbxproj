@@ -63,8 +63,7 @@
 			children = (
 				43F4DFA92B8167C00033CE55 /* TodayApp.swift */,
 				43F4DFBD2B816A740033CE55 /* ContentView.swift */,
-				43F4DFAB2B8167C00033CE55 /* TodayView.swift */,
-				43F4DFBF2B816A9C0033CE55 /* TomorrowView.swift */,
+				43F4DFC12B81755A0033CE55 /* Views */,
 				43F4DFBB2B8169FD0033CE55 /* NavigationViewModel.swift */,
 				43F4DFAD2B8167C00033CE55 /* ToDoListItem.swift */,
 				43F4DFAF2B8167C10033CE55 /* Assets.xcassets */,
@@ -81,6 +80,15 @@
 				43F4DFB32B8167C10033CE55 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		43F4DFC12B81755A0033CE55 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				43F4DFAB2B8167C00033CE55 /* TodayView.swift */,
+				43F4DFBF2B816A9C0033CE55 /* TomorrowView.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

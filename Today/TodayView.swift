@@ -18,10 +18,7 @@ struct TodayView: View {
                 ForEach(toDoListItems) { item in
                     HStack {
                         VStack(alignment: .leading) {
-                            Text(item.toDoListText) 
-                            Text("Added on \(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))")
-                                .font(.caption)
-                                .foregroundColor(.gray)
+                            Text(item.toDoListText)
                         }
                         Spacer()
 
@@ -45,7 +42,6 @@ struct TodayView: View {
                 
                 Button(action: {
                     self.showingAddToDo = true
-                    addItem()
                 }) {
                     Image(systemName: "plus.circle.fill")
                         .resizable()
@@ -61,7 +57,7 @@ struct TodayView: View {
                                }.padding()
             }
             
-        } .sheet(isPresented: $showingAddToDo) {
+        }.sheet(isPresented: $showingAddToDo) {
             
             VStack {
                 TextField("Enter new task", text: $newToDoText)
@@ -80,7 +76,7 @@ struct TodayView: View {
                               Spacer()
                     
                     Button("Save") {
-                        newToDoText = ""
+                        addItem()
                         self.showingAddToDo = false
                     }
                     .foregroundColor(.gray)

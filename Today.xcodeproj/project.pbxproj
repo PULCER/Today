@@ -12,6 +12,7 @@
 		43F4DFAE2B8167C00033CE55 /* ToDoListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43F4DFAD2B8167C00033CE55 /* ToDoListItem.swift */; };
 		43F4DFB02B8167C10033CE55 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 43F4DFAF2B8167C10033CE55 /* Assets.xcassets */; };
 		43F4DFB42B8167C10033CE55 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 43F4DFB32B8167C10033CE55 /* Preview Assets.xcassets */; };
+		43F4DFBC2B8169FD0033CE55 /* NavigationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43F4DFBB2B8169FD0033CE55 /* NavigationViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -23,6 +24,7 @@
 		43F4DFB12B8167C10033CE55 /* Today.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Today.entitlements; sourceTree = "<group>"; };
 		43F4DFB32B8167C10033CE55 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		43F4DFB52B8167C10033CE55 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		43F4DFBB2B8169FD0033CE55 /* NavigationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,6 +59,7 @@
 			children = (
 				43F4DFA92B8167C00033CE55 /* TodayApp.swift */,
 				43F4DFAB2B8167C00033CE55 /* ContentView.swift */,
+				43F4DFBB2B8169FD0033CE55 /* NavigationViewModel.swift */,
 				43F4DFAD2B8167C00033CE55 /* ToDoListItem.swift */,
 				43F4DFAF2B8167C10033CE55 /* Assets.xcassets */,
 				43F4DFB12B8167C10033CE55 /* Today.entitlements */,
@@ -144,6 +147,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				43F4DFBC2B8169FD0033CE55 /* NavigationViewModel.swift in Sources */,
 				43F4DFAC2B8167C00033CE55 /* ContentView.swift in Sources */,
 				43F4DFAE2B8167C00033CE55 /* ToDoListItem.swift in Sources */,
 				43F4DFAA2B8167C00033CE55 /* TodayApp.swift in Sources */,

@@ -51,18 +51,20 @@ struct TodayView: View {
         }
         
     }
+    
     private func addItem() {
-        withAnimation {
-            let newItem = ToDoListItem(timestamp: Date())
-            modelContext.insert(newItem)
-        }
-    }
+           withAnimation {
+               let newItem = ToDoListItem(timestamp: Date(), toDoListText: newToDoText, isCompleted: false)
+               modelContext.insert(newItem)
+               newToDoText = "" // Reset the text field after adding
+           }
+       }
 
-    private func deleteItems(offsets: IndexSet) {
-        withAnimation {
-            for index in offsets {
-                modelContext.delete(toDoListItems[index])
-            }
-        }
-    }
+       private func deleteItems(offsets: IndexSet) {
+           withAnimation {
+               for index in offsets {
+                   modelContext.delete(toDoListItems[index])
+               }
+           }
+       }
 }

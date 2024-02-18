@@ -15,6 +15,7 @@
 		43F4DFBC2B8169FD0033CE55 /* NavigationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43F4DFBB2B8169FD0033CE55 /* NavigationViewModel.swift */; };
 		43F4DFBE2B816A740033CE55 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43F4DFBD2B816A740033CE55 /* ContentView.swift */; };
 		43F4DFC02B816A9C0033CE55 /* TomorrowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43F4DFBF2B816A9C0033CE55 /* TomorrowView.swift */; };
+		43F563C72B8285EB0038B78F /* PerformanceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43F563C62B8285EB0038B78F /* PerformanceView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -29,6 +30,7 @@
 		43F4DFBB2B8169FD0033CE55 /* NavigationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationViewModel.swift; sourceTree = "<group>"; };
 		43F4DFBD2B816A740033CE55 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		43F4DFBF2B816A9C0033CE55 /* TomorrowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TomorrowView.swift; sourceTree = "<group>"; };
+		43F563C62B8285EB0038B78F /* PerformanceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerformanceView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -87,6 +89,7 @@
 			children = (
 				43F4DFAB2B8167C00033CE55 /* TodayView.swift */,
 				43F4DFBF2B816A9C0033CE55 /* TomorrowView.swift */,
+				43F563C62B8285EB0038B78F /* PerformanceView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -166,6 +169,7 @@
 				43F4DFAC2B8167C00033CE55 /* TodayView.swift in Sources */,
 				43F4DFAE2B8167C00033CE55 /* ToDoListItem.swift in Sources */,
 				43F4DFAA2B8167C00033CE55 /* TodayApp.swift in Sources */,
+				43F563C72B8285EB0038B78F /* PerformanceView.swift in Sources */,
 				43F4DFC02B816A9C0033CE55 /* TomorrowView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

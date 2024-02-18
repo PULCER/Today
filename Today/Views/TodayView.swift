@@ -52,6 +52,7 @@ struct TodayView: View {
             HStack {
                 
                 Button(action: {
+                    navigationViewModel.currentScreen = .performance
                 }) {
                     Image(systemName: "chevron.backward")
                 }.padding()

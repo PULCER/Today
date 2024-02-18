@@ -9,6 +9,8 @@ struct ContentView: View {
             TodayView()
         case .tomorrow:
             TomorrowView()
+        case .performance:
+            PerformanceView()
         }
     }
 }

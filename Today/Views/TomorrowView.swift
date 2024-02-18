@@ -38,6 +38,7 @@ struct TomorrowView: View {
                     HStack {
                         VStack(alignment: .leading) {
                             Text(item.toDoListText)
+                                .font(.title3)
                         }
                         Spacer()
                         
@@ -78,7 +79,14 @@ struct TomorrowView: View {
                     .opacity(0)
             }
             
-        }.sheet(isPresented: $showingAddToDo) {
+        }
+        .gesture(DragGesture(minimumDistance: 100, coordinateSpace: .local)
+            .onEnded { value in
+                if value.translation.width > 0 {
+                    navigationViewModel.currentScreen = .today
+                }
+            })
+        .sheet(isPresented: $showingAddToDo) {
             
             VStack {
                 TextField("Enter new task", text: $newToDoText)

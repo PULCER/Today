@@ -19,6 +19,12 @@ struct PerformanceView: View {
         group.filter { $0.isCompleted }.count
     }
 
+    private func taskCompletionRate(for group: [ToDoListItem]) -> CGFloat {
+        let completedCount = CGFloat(completedTasksCount(for: group))
+        let totalCount = CGFloat(group.count)
+        return totalCount > 0 ? (completedCount / totalCount) : 0
+    }
+
     var body: some View {
         VStack {
             Text("Performance")
@@ -26,33 +32,42 @@ struct PerformanceView: View {
                 .fontWeight(.bold)
 
             List {
-                           ForEach(pastTasks.keys.sorted().reversed(), id: \.self) { day in
-                               if let tasks = pastTasks[day] {
-                                   DisclosureGroup {
-                                       ForEach(tasks.sorted { item1, item2 in
-                                           if item1.isCompleted && !item2.isCompleted {
-                                               return false
-                                           } else {
-                                               return true
-                                           }
-                                       }) { task in
-                                           HStack {
-                                               Text(task.toDoListText)
-                                               Spacer()
-                                               Button(action: {
-                                                   task.isCompleted.toggle()
-                                               }) {
-                                                   Image(systemName: task.isCompleted ? "checkmark.circle.fill" : "circle")
-                                                       .foregroundColor(task.isCompleted ? .green : .gray)
-                                               }
-                                           }
-                                       }
+                ForEach(pastTasks.keys.sorted().reversed(), id: \.self) { day in
+                    if let tasks = pastTasks[day] {
+                        DisclosureGroup {
+                            ForEach(tasks.sorted { item1, item2 in
+                                if item1.isCompleted && !item2.isCompleted {
+                                    return false
+                                } else {
+                                    return true
+                                }
+                            }) { task in
+                                HStack {
+                                    Text(task.toDoListText)
+                                    Spacer()
+                                    Button(action: {
+                                        task.isCompleted.toggle()
+                                    }) {
+                                        Image(systemName: task.isCompleted ? "checkmark.circle.fill" : "circle")
+                                            .foregroundColor(task.isCompleted ? .green : .gray)
+                                    }
+                                }
+                            }
                         } label: {
                             HStack {
-                                Text(day, style: .date)
+                                Text(day, formatter: DateFormatter.shortDate)
+                                    .font(.title3)
                                 Spacer()
-                                Text("\(completedTasksCount(for: tasks)) Completed")
-                                    .foregroundColor(.green)
+                                Text("\(completedTasksCount(for: tasks))/\(tasks.count)")
+                                    .font(.title3)
+                                ZStack(alignment: .leading) {
+                                    RoundedRectangle(cornerRadius: 4)
+                                        .frame(width: 100, height: 15)
+                                        .foregroundColor(.red)
+                                    RoundedRectangle(cornerRadius: 4)
+                                        .frame(width: 100 * taskCompletionRate(for: tasks), height: 15)
+                                        .foregroundColor(.green)
+                                }
                             }
                         }
                     }
@@ -87,6 +102,19 @@ struct PerformanceView: View {
                 }.padding()
             
             }
-        }
+        } .gesture(DragGesture(minimumDistance: 100, coordinateSpace: .local)
+            .onEnded { value in
+                if value.translation.width < 0 {
+                    navigationViewModel.currentScreen = .today
+                }
+            })
     }
+}
+
+extension DateFormatter {
+    static let shortDate: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .short
+        return formatter
+    }()
 }

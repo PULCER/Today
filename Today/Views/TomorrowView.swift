@@ -10,14 +10,11 @@ struct TomorrowView: View {
     
     private var tomorrowsTasks: [ToDoListItem] {
         let calendar = Calendar.current
-        // Calculate the start of tomorrow
         let tomorrowStart = calendar.startOfDay(for: calendar.date(byAdding: .day, value: 1, to: Date())!)
 
-        // Filter toDoListItems for those whose timestamp falls within tomorrow
         return toDoListItems.filter { item in
             calendar.isDate(item.timestamp, inSameDayAs: tomorrowStart)
         }
-        // Optionally, you can sort the filtered items here
         .sorted { item1, item2 in
             if item1.isCompleted && !item2.isCompleted {
                 return false

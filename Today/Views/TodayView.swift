@@ -13,7 +13,6 @@ struct TodayView: View {
             let filteredItems = toDoListItems.filter { item in
                 calendar.isDate(item.timestamp, inSameDayAs: Date())
             }
-            // Sort the filtered items here
             return filteredItems.sorted { item1, item2 in
                 if item1.isCompleted && !item2.isCompleted {
                     return false

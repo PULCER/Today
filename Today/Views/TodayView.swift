@@ -79,10 +79,8 @@ struct TodayView: View {
         .gesture(DragGesture(minimumDistance: swipeSensitivity, coordinateSpace: .local)
                     .onEnded { value in
                         if value.translation.width < 0 {
-                            // left swipe
                             navigationViewModel.currentScreen = .tomorrow
                         } else if value.translation.width > 0 {
-                            // right swipe
                             navigationViewModel.currentScreen = .performance
                         }
                     })

@@ -73,7 +73,7 @@ struct SettingsView: View {
                 }.padding()
                 
             }
-        } .gesture(DragGesture(minimumDistance: 25, coordinateSpace: .local)
+        } .gesture(DragGesture(minimumDistance: swipeSensitivity, coordinateSpace: .local)
             .onEnded { value in
                 if value.translation.width < 0 {
                     navigationViewModel.currentScreen = .performance

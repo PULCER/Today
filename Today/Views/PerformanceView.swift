@@ -5,6 +5,7 @@ struct PerformanceView: View {
     @Environment(\.modelContext) private var modelContext
     @EnvironmentObject var navigationViewModel: NavigationViewModel
     @Query private var toDoListItems: [ToDoListItem]
+    @AppStorage("swipeSensitivity") private var swipeSensitivity: Double = 20.0 
 
     private var pastTasks: [Date: [ToDoListItem]] {
         let tasks = Dictionary(grouping: toDoListItems) { item in
@@ -101,7 +102,7 @@ struct PerformanceView: View {
                 }.padding()
             
             }
-        } .gesture(DragGesture(minimumDistance: 25, coordinateSpace: .local)
+        } .gesture(DragGesture(minimumDistance: swipeSensitivity, coordinateSpace: .local)
             .onEnded { value in
                 if value.translation.width < 0 {
                     // left swipe

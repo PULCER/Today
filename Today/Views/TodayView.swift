@@ -7,6 +7,7 @@ struct TodayView: View {
     @Query private var toDoListItems: [ToDoListItem]
     @State private var newToDoText = ""
     @State private var showingAddToDo = false
+    @AppStorage("swipeSensitivity") private var swipeSensitivity: Double = 20.0 
     
     private var todaysTasks: [ToDoListItem] {
             let calendar = Calendar.current
@@ -75,7 +76,7 @@ struct TodayView: View {
             }
             
         }
-        .gesture(DragGesture(minimumDistance: 25, coordinateSpace: .local)
+        .gesture(DragGesture(minimumDistance: swipeSensitivity, coordinateSpace: .local)
                     .onEnded { value in
                         if value.translation.width < 0 {
                             // left swipe

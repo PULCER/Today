@@ -113,7 +113,7 @@ struct TodayView: View {
                 
             }
             .padding()
-            .presentationDetents([.height(150)])
+            .presentationDetents([.height(100)])
         }
         
     }

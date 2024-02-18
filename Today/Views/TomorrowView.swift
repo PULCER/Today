@@ -90,7 +90,7 @@ struct TomorrowView: View {
         .sheet(isPresented: $showingAddToDo) {
             
             VStack {
-                TextField("Enter new task", text: $newToDoText)
+                AutoFocusTextField(text: $newToDoText, placeholder: "Enter new task")
                 
                 Spacer()
                 
@@ -116,7 +116,7 @@ struct TomorrowView: View {
                 
             }
             .padding()
-            .presentationDetents([.height(150)])
+            .presentationDetents([.height(100)])
         }
         
     }

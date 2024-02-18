@@ -116,7 +116,7 @@ struct TomorrowView: View {
                 
             }
             .padding()
-            .presentationDetents([.height(125)])
+            .presentationDetents([.height(150)])
         }
         
     }

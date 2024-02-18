@@ -5,6 +5,7 @@ class NavigationViewModel: ObservableObject {
         case today
         case tomorrow
         case performance
+        case settings
     }
     @Published var currentScreen: Screen = .today
 }

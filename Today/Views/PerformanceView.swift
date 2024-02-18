@@ -79,11 +79,10 @@ struct PerformanceView: View {
             HStack {
                 
                 Button(action: {
-                    navigationViewModel.currentScreen = .today
+                    navigationViewModel.currentScreen = .settings
                 }) {
                     Image(systemName: "chevron.backward")
                 }.padding()
-                    .opacity(0)
                 
                 Button(action: {
            
@@ -102,10 +101,14 @@ struct PerformanceView: View {
                 }.padding()
             
             }
-        } .gesture(DragGesture(minimumDistance: 100, coordinateSpace: .local)
+        } .gesture(DragGesture(minimumDistance: 25, coordinateSpace: .local)
             .onEnded { value in
                 if value.translation.width < 0 {
+                    // left swipe
                     navigationViewModel.currentScreen = .today
+                } else if value.translation.width > 0 {
+                    // right swipe
+                    navigationViewModel.currentScreen = .settings
                 }
             })
     }

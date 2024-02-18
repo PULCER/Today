@@ -11,6 +11,8 @@ struct ContentView: View {
             TomorrowView()
         case .performance:
             PerformanceView()
+        case .settings:
+            SettingsView()
         }
     }
 }

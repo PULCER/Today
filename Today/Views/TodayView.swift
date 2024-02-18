@@ -75,7 +75,7 @@ struct TodayView: View {
             }
             
         }
-        .gesture(DragGesture(minimumDistance: 100, coordinateSpace: .local)
+        .gesture(DragGesture(minimumDistance: 25, coordinateSpace: .local)
                     .onEnded { value in
                         if value.translation.width < 0 {
                             // left swipe

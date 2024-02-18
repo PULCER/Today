@@ -1,24 +1,66 @@
-//
-//  PastView.swift
-//  Today
-//
-//  Created by Anthony Howell on 2/18/24.
-//
-
 import SwiftUI
+import SwiftData
 
 struct PerformanceView: View {
     @Environment(\.modelContext) private var modelContext
     @EnvironmentObject var navigationViewModel: NavigationViewModel
-    
+    @Query private var toDoListItems: [ToDoListItem]
+
+    private var pastTasks: [Date: [ToDoListItem]] {
+        let tasks = Dictionary(grouping: toDoListItems) { item in
+            Calendar.current.startOfDay(for: item.timestamp)
+        }
+        let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: Calendar.current.startOfDay(for: Date()))!
+        
+        return tasks.filter { $0.key <= yesterday }
+    }
+
+    private func completedTasksCount(for group: [ToDoListItem]) -> Int {
+        group.filter { $0.isCompleted }.count
+    }
+
     var body: some View {
         VStack {
             Text("Performance")
                 .font(.largeTitle)
                 .fontWeight(.bold)
-            
+
+            List {
+                           ForEach(pastTasks.keys.sorted().reversed(), id: \.self) { day in
+                               if let tasks = pastTasks[day] {
+                                   DisclosureGroup {
+                                       ForEach(tasks.sorted { item1, item2 in
+                                           if item1.isCompleted && !item2.isCompleted {
+                                               return false
+                                           } else {
+                                               return true
+                                           }
+                                       }) { task in
+                                           HStack {
+                                               Text(task.toDoListText)
+                                               Spacer()
+                                               Button(action: {
+                                                   task.isCompleted.toggle()
+                                               }) {
+                                                   Image(systemName: task.isCompleted ? "checkmark.circle.fill" : "circle")
+                                                       .foregroundColor(task.isCompleted ? .green : .gray)
+                                               }
+                                           }
+                                       }
+                        } label: {
+                            HStack {
+                                Text(day, style: .date)
+                                Spacer()
+                                Text("\(completedTasksCount(for: tasks)) Completed")
+                                    .foregroundColor(.green)
+                            }
+                        }
+                    }
+                }
+            }
+
             Spacer()
-            
+
             HStack {
                 
                 Button(action: {
@@ -45,7 +87,6 @@ struct PerformanceView: View {
                 }.padding()
             
             }
-            
         }
     }
 }

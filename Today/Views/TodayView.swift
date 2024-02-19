@@ -87,7 +87,12 @@ struct TodayView: View {
         .sheet(isPresented: $showingAddToDo) {
             
             VStack {
-                AutoFocusTextField(text: $newToDoText, placeholder: "Enter new task")
+                ScrollView(.horizontal) {
+                    HStack {
+                        AutoFocusTextField(text: $newToDoText, placeholder: "Enter new task")
+                            .frame(width: 250)
+                    }
+                }
                 
                 Spacer()
                 
@@ -115,7 +120,6 @@ struct TodayView: View {
             .padding()
             .presentationDetents([.height(100)])
         }
-        
     }
     
     private func addItem() {

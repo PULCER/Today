@@ -90,7 +90,13 @@ struct TomorrowView: View {
         .sheet(isPresented: $showingAddToDo) {
             
             VStack {
-                AutoFocusTextField(text: $newToDoText, placeholder: "Enter new task")
+                
+                ScrollView(.horizontal) {
+                    HStack {
+                        AutoFocusTextField(text: $newToDoText, placeholder: "Enter new task")
+                            .frame(width: 250)
+                    }
+                }
                 
                 Spacer()
                 
@@ -109,7 +115,7 @@ struct TomorrowView: View {
                         addItem()
                         self.showingAddToDo = false
                     }
-                    .foregroundColor(.gray)
+                    .foregroundColor(.blue)
                     .font(.title3)
                     
                 }.padding(.vertical)

@@ -24,7 +24,6 @@ struct RecurringView: View {
                         VStack(alignment: .leading) {
                             Text(task.recurringToDoItemText)
                                 .font(.title3)
-                            // Apply styling for priority
                                 .bold()
                                 .foregroundColor(task.priorityTask ? .red : .primary)
                             
@@ -35,12 +34,6 @@ struct RecurringView: View {
                         Spacer()
                         Image(systemName: "arrow.triangle.2.circlepath")
                             .font(.caption2)
-                        
-                        Button(action: {
-                            task.isCompleted.toggle()
-                        }) {
-                            Image(systemName: task.isCompleted ? "checkmark.circle.fill" : "circle")
-                        }
                     }
                 }
                 .onDelete(perform: deleteItems)

@@ -25,6 +25,9 @@ struct RecurringView: View {
                             Text(task.recurringToDoItemText).font(.title3)
                             Text("Frequency: \(task.taskFrequency), Interval: \(task.interval) day(s)").font(.caption)
                         }
+                        
+                        Spacer()
+                        
                         Button(action: {
                             task.isCompleted.toggle()
                         }) {
@@ -61,24 +64,31 @@ struct RecurringView: View {
         }
         .sheet(isPresented: $showingAddRecurringTask, onDismiss: resetInputFields) {
             VStack {
+                ScrollView(.horizontal) {
+                    HStack {
+                        AutoFocusTextField(text: $newRecurringTaskText, placeholder: "Recurring Task Description")
+                            .frame(width: 250)
+                        
+                    }
+                }.padding()
                 
+                Picker("Frequency", selection: $selectedFrequency) {
+                    ForEach(TaskFrequency.allCases, id: \.self) { frequency in
+                        Text(frequency.rawValue).tag(frequency)
+                    }
+                }
+                .pickerStyle(SegmentedPickerStyle())
+                .padding()
                 
-                Text("Add Recurring Task")
-                                   .font(.headline)
-                                   .padding()
+                Stepper(value: $interval, in: 1...100) {
+                    Text("\(intervalDescription(interval)) Per \(frequencyDescription(selectedFrequency))")
+                }
+                .padding()
+ 
+                
+                Toggle("Priority Task", isOn: $isPriorityTask) .padding()
 
-                               Form {
-                                   Section(header: Text("Task Details")) {
-                                       AutoFocusTextField(text: $newRecurringTaskText, placeholder: "Enter task description")
-                                       Picker("Frequency", selection: $selectedFrequency) {
-                                           ForEach(TaskFrequency.allCases, id: \.self) { frequency in
-                                               Text(frequency.rawValue).tag(frequency)
-                                           }
-                                       }
-                                       Stepper("Interval: \(interval) day(s)", value: $interval, in: 1...365)
-                                       Toggle("Priority Task", isOn: $isPriorityTask)
-                                   }
-                               }
+                Spacer()
 
                 HStack {
                     Button("Discard") {
@@ -86,6 +96,7 @@ struct RecurringView: View {
                     }
                     .foregroundColor(.gray)
                     .font(.title3)
+                    .padding()
 
                     Spacer()
 
@@ -95,13 +106,55 @@ struct RecurringView: View {
                     }
                     .foregroundColor(.blue)
                     .font(.title3)
+                    .padding()
                 }
             }
             .padding()
+            .presentationDetents([.height(350)])
         }
-        .presentationDetents([.medium])
+    }
+    
+    private func intervalDescription(_ interval: Int) -> String {
+        switch interval {
+        case 1:
+            return "Once"
+        case 2:
+            return "Twice"
+        case 3:
+            return "Three Times"
+        case 4:
+            return "Four Times"
+        case 5:
+            return "Five Times"
+        case 6:
+            return "Six Times"
+        case 7:
+            return "Seven Times"
+        case 8:
+            return "Eight Times"
+        case 9:
+            return "Nine Times"
+        case 10:
+            return "Ten Times"
+        default:
+            return "\(interval) Times"
+        }
     }
 
+
+       private func frequencyDescription(_ frequency: TaskFrequency) -> String {
+           switch frequency {
+           case .daily:
+               return "Day"
+           case .weekly:
+               return "Week"
+           case .monthly:
+               return "Month"
+           case .yearly:
+               return "Year"
+           }
+       }
+    
     private func addRecurringTask() {
            withAnimation {
                let newTask = RecurringTaskItem(timestamp: Date(), recurringToDoItemText: newRecurringTaskText, isCompleted: false, taskFrequency: selectedFrequency.rawValue, interval: interval, priorityTask: isPriorityTask)

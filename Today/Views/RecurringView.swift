@@ -9,6 +9,8 @@ struct RecurringView: View {
     @State private var selectedFrequency = TaskFrequency.daily
     @State private var interval = 1
     @AppStorage("swipeSensitivity") private var swipeSensitivity: Double = 20.0
+    @Query private var recurringTasks: [RecurringTaskItem] 
+    @State private var isPriorityTask = false
 
     var body: some View {
         VStack {
@@ -16,7 +18,22 @@ struct RecurringView: View {
                 .font(.largeTitle)
                 .fontWeight(.bold)
 
-            Spacer()
+            List {
+                ForEach(recurringTasks) { task in
+                    HStack {
+                        VStack(alignment: .leading) {
+                            Text(task.recurringToDoItemText).font(.title3)
+                            Text("Frequency: \(task.taskFrequency), Interval: \(task.interval) day(s)").font(.caption)
+                        }
+                        Button(action: {
+                            task.isCompleted.toggle()
+                        }) {
+                            Image(systemName: task.isCompleted ? "checkmark.circle.fill" : "circle")
+                        }
+                    }
+                }
+                .onDelete(perform: deleteItems)
+            }
 
             HStack {
                 Button(action: {
@@ -44,57 +61,68 @@ struct RecurringView: View {
         }
         .sheet(isPresented: $showingAddRecurringTask, onDismiss: resetInputFields) {
             VStack {
+                
+                
                 Text("Add Recurring Task")
-                    .font(.headline)
-                    .padding()
+                                   .font(.headline)
+                                   .padding()
 
-                Form {
-                    Section(header: Text("Task Details")) {
-                        AutoFocusTextField(text: $newRecurringTaskText, placeholder: "Enter task description")
-                        Picker("Frequency", selection: $selectedFrequency) {
-                            ForEach(TaskFrequency.allCases, id: \.self) { frequency in
-                                Text(frequency.rawValue).tag(frequency)
-                            }
-                        }
-                        Stepper("Interval: \(interval) day(s)", value: $interval, in: 1...365)
-                    }
-                }
-
-                Spacer()
+                               Form {
+                                   Section(header: Text("Task Details")) {
+                                       AutoFocusTextField(text: $newRecurringTaskText, placeholder: "Enter task description")
+                                       Picker("Frequency", selection: $selectedFrequency) {
+                                           ForEach(TaskFrequency.allCases, id: \.self) { frequency in
+                                               Text(frequency.rawValue).tag(frequency)
+                                           }
+                                       }
+                                       Stepper("Interval: \(interval) day(s)", value: $interval, in: 1...365)
+                                       Toggle("Priority Task", isOn: $isPriorityTask)
+                                   }
+                               }
 
                 HStack {
-                    Button("Cancel") {
+                    Button("Discard") {
                         showingAddRecurringTask = false
                     }
-                    .padding()
-                    .foregroundColor(.red)
+                    .foregroundColor(.gray)
+                    .font(.title3)
 
                     Spacer()
 
-                    Button("Add") {
+                    Button("Save") {
                         addRecurringTask()
                         showingAddRecurringTask = false
                     }
-                    .padding()
                     .foregroundColor(.blue)
+                    .font(.title3)
                 }
             }
             .padding()
         }
+        .presentationDetents([.medium])
     }
 
     private func addRecurringTask() {
+           withAnimation {
+               let newTask = RecurringTaskItem(timestamp: Date(), recurringToDoItemText: newRecurringTaskText, isCompleted: false, taskFrequency: selectedFrequency.rawValue, interval: interval, priorityTask: isPriorityTask)
+               modelContext.insert(newTask)
+               resetInputFields()
+           }
+       }
+
+    private func deleteItems(offsets: IndexSet) {
         withAnimation {
-            let newTask = RecurringTaskItem(timestamp: Date(), recurringToDoItemText: newRecurringTaskText, isCompleted: false, taskFrequency: selectedFrequency.rawValue, interval: interval)
-            modelContext.insert(newTask)
-            // After adding the task, reset the form fields
-            resetInputFields()
+            offsets.forEach { offset in
+                let taskToDelete = recurringTasks[offset]
+                modelContext.delete(taskToDelete)
+            }
         }
     }
 
     private func resetInputFields() {
-        newRecurringTaskText = ""
-        selectedFrequency = .daily
-        interval = 1
-    }
+            newRecurringTaskText = ""
+            selectedFrequency = .daily
+            interval = 1
+            isPriorityTask = false
+        }
 }

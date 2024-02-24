@@ -9,24 +9,32 @@ struct RecurringView: View {
     @State private var selectedFrequency = TaskFrequency.daily
     @State private var interval = 1
     @AppStorage("swipeSensitivity") private var swipeSensitivity: Double = 20.0
-    @Query private var recurringTasks: [RecurringTaskItem] 
+    @Query private var recurringTasks: [RecurringTaskItem]
     @State private var isPriorityTask = false
-
+    
     var body: some View {
         VStack {
             Text("Recurring")
                 .font(.largeTitle)
                 .fontWeight(.bold)
-
+            
             List {
-                ForEach(recurringTasks) { task in
+                ForEach(recurringTasks.sorted(by: { $0.priorityTask && !$1.priorityTask })) { task in
                     HStack {
                         VStack(alignment: .leading) {
-                            Text(task.recurringToDoItemText).font(.title3)
-                            Text("Frequency: \(task.taskFrequency), Interval: \(task.interval) day(s)").font(.caption)
+                            Text(task.recurringToDoItemText)
+                                .font(.title3)
+                            // Apply styling for priority
+                                .bold()
+                                .foregroundColor(task.priorityTask ? .red : .primary)
+                            
+                            Text("\(intervalDescription(task.interval)) Per \(frequencyDescription(TaskFrequency(rawValue: task.taskFrequency) ?? .daily))")
+                                .font(.caption)
                         }
                         
                         Spacer()
+                        Image(systemName: "arrow.triangle.2.circlepath")
+                            .font(.caption2)
                         
                         Button(action: {
                             task.isCompleted.toggle()
@@ -37,14 +45,14 @@ struct RecurringView: View {
                 }
                 .onDelete(perform: deleteItems)
             }
-
+            
             HStack {
                 Button(action: {
                     navigationViewModel.currentScreen = .today
                 }) {
                     Image(systemName: "chevron.down")
                 }.padding()
-
+                
                 Button(action: {
                     self.showingAddRecurringTask = true
                 }) {
@@ -54,7 +62,7 @@ struct RecurringView: View {
                         .foregroundColor(.blue)
                         .padding()
                 }
-
+                
                 Button(action: {
                     navigationViewModel.currentScreen = .today
                 }) {
@@ -84,12 +92,12 @@ struct RecurringView: View {
                     Text("\(intervalDescription(interval)) Per \(frequencyDescription(selectedFrequency))")
                 }
                 .padding()
- 
+                
                 
                 Toggle("Priority Task", isOn: $isPriorityTask) .padding()
-
+                
                 Spacer()
-
+                
                 HStack {
                     Button("Discard") {
                         showingAddRecurringTask = false
@@ -97,9 +105,9 @@ struct RecurringView: View {
                     .foregroundColor(.gray)
                     .font(.title3)
                     .padding()
-
+                    
                     Spacer()
-
+                    
                     Button("Save") {
                         addRecurringTask()
                         showingAddRecurringTask = false
@@ -140,29 +148,28 @@ struct RecurringView: View {
             return "\(interval) Times"
         }
     }
-
-
-       private func frequencyDescription(_ frequency: TaskFrequency) -> String {
-           switch frequency {
-           case .daily:
-               return "Day"
-           case .weekly:
-               return "Week"
-           case .monthly:
-               return "Month"
-           case .yearly:
-               return "Year"
-           }
-       }
+    
+    private func frequencyDescription(_ frequency: TaskFrequency) -> String {
+        switch frequency {
+        case .daily:
+            return "Day"
+        case .weekly:
+            return "Week"
+        case .monthly:
+            return "Month"
+        case .yearly:
+            return "Year"
+        }
+    }
     
     private func addRecurringTask() {
-           withAnimation {
-               let newTask = RecurringTaskItem(timestamp: Date(), recurringToDoItemText: newRecurringTaskText, isCompleted: false, taskFrequency: selectedFrequency.rawValue, interval: interval, priorityTask: isPriorityTask)
-               modelContext.insert(newTask)
-               resetInputFields()
-           }
-       }
-
+        withAnimation {
+            let newTask = RecurringTaskItem(timestamp: Date(), recurringToDoItemText: newRecurringTaskText, isCompleted: false, taskFrequency: selectedFrequency.rawValue, interval: interval, priorityTask: isPriorityTask)
+            modelContext.insert(newTask)
+            resetInputFields()
+        }
+    }
+    
     private func deleteItems(offsets: IndexSet) {
         withAnimation {
             offsets.forEach { offset in
@@ -171,11 +178,11 @@ struct RecurringView: View {
             }
         }
     }
-
+    
     private func resetInputFields() {
-            newRecurringTaskText = ""
-            selectedFrequency = .daily
-            interval = 1
-            isPriorityTask = false
-        }
+        newRecurringTaskText = ""
+        selectedFrequency = .daily
+        interval = 1
+        isPriorityTask = false
+    }
 }

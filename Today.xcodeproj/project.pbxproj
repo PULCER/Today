@@ -9,9 +9,10 @@
 /* Begin PBXBuildFile section */
 		43026B342B82A7140084698B /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43026B332B82A7140084698B /* SettingsView.swift */; };
 		43AE9FDD2B82B4EC006789C0 /* AutoFocusedTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43AE9FDC2B82B4EC006789C0 /* AutoFocusedTextField.swift */; };
+		43AF445C2B898C8300D666C5 /* RecurringView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43AF445B2B898C8300D666C5 /* RecurringView.swift */; };
 		43F4DFAA2B8167C00033CE55 /* TodayApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43F4DFA92B8167C00033CE55 /* TodayApp.swift */; };
 		43F4DFAC2B8167C00033CE55 /* TodayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43F4DFAB2B8167C00033CE55 /* TodayView.swift */; };
-		43F4DFAE2B8167C00033CE55 /* ToDoListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43F4DFAD2B8167C00033CE55 /* ToDoListItem.swift */; };
+		43F4DFAE2B8167C00033CE55 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43F4DFAD2B8167C00033CE55 /* Model.swift */; };
 		43F4DFB02B8167C10033CE55 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 43F4DFAF2B8167C10033CE55 /* Assets.xcassets */; };
 		43F4DFB42B8167C10033CE55 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 43F4DFB32B8167C10033CE55 /* Preview Assets.xcassets */; };
 		43F4DFBC2B8169FD0033CE55 /* NavigationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43F4DFBB2B8169FD0033CE55 /* NavigationViewModel.swift */; };
@@ -23,10 +24,11 @@
 /* Begin PBXFileReference section */
 		43026B332B82A7140084698B /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		43AE9FDC2B82B4EC006789C0 /* AutoFocusedTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoFocusedTextField.swift; sourceTree = "<group>"; };
+		43AF445B2B898C8300D666C5 /* RecurringView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecurringView.swift; sourceTree = "<group>"; };
 		43F4DFA62B8167C00033CE55 /* Today.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Today.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		43F4DFA92B8167C00033CE55 /* TodayApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayApp.swift; sourceTree = "<group>"; };
 		43F4DFAB2B8167C00033CE55 /* TodayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayView.swift; sourceTree = "<group>"; };
-		43F4DFAD2B8167C00033CE55 /* ToDoListItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoListItem.swift; sourceTree = "<group>"; };
+		43F4DFAD2B8167C00033CE55 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 		43F4DFAF2B8167C10033CE55 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		43F4DFB12B8167C10033CE55 /* Today.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Today.entitlements; sourceTree = "<group>"; };
 		43F4DFB32B8167C10033CE55 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
@@ -48,6 +50,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		43AF445A2B898C5100D666C5 /* Nav */ = {
+			isa = PBXGroup;
+			children = (
+				43F4DFBD2B816A740033CE55 /* ContentView.swift */,
+				43F4DFBB2B8169FD0033CE55 /* NavigationViewModel.swift */,
+			);
+			path = Nav;
+			sourceTree = "<group>";
+		};
 		43F4DF9D2B8167C00033CE55 = {
 			isa = PBXGroup;
 			children = (
@@ -68,10 +79,9 @@
 			isa = PBXGroup;
 			children = (
 				43F4DFA92B8167C00033CE55 /* TodayApp.swift */,
-				43F4DFBD2B816A740033CE55 /* ContentView.swift */,
 				43F4DFC12B81755A0033CE55 /* Views */,
-				43F4DFBB2B8169FD0033CE55 /* NavigationViewModel.swift */,
-				43F4DFAD2B8167C00033CE55 /* ToDoListItem.swift */,
+				43F4DFAD2B8167C00033CE55 /* Model.swift */,
+				43AF445A2B898C5100D666C5 /* Nav */,
 				43F4DFAF2B8167C10033CE55 /* Assets.xcassets */,
 				43F4DFB12B8167C10033CE55 /* Today.entitlements */,
 				43F4DFB52B8167C10033CE55 /* Info.plist */,
@@ -93,6 +103,7 @@
 			children = (
 				43F4DFAB2B8167C00033CE55 /* TodayView.swift */,
 				43F4DFBF2B816A9C0033CE55 /* TomorrowView.swift */,
+				43AF445B2B898C8300D666C5 /* RecurringView.swift */,
 				43F563C62B8285EB0038B78F /* PerformanceView.swift */,
 				43026B332B82A7140084698B /* SettingsView.swift */,
 				43AE9FDC2B82B4EC006789C0 /* AutoFocusedTextField.swift */,
@@ -172,10 +183,11 @@
 			files = (
 				43F4DFBC2B8169FD0033CE55 /* NavigationViewModel.swift in Sources */,
 				43026B342B82A7140084698B /* SettingsView.swift in Sources */,
+				43AF445C2B898C8300D666C5 /* RecurringView.swift in Sources */,
 				43F4DFBE2B816A740033CE55 /* ContentView.swift in Sources */,
 				43AE9FDD2B82B4EC006789C0 /* AutoFocusedTextField.swift in Sources */,
 				43F4DFAC2B8167C00033CE55 /* TodayView.swift in Sources */,
-				43F4DFAE2B8167C00033CE55 /* ToDoListItem.swift in Sources */,
+				43F4DFAE2B8167C00033CE55 /* Model.swift in Sources */,
 				43F4DFAA2B8167C00033CE55 /* TodayApp.swift in Sources */,
 				43F563C72B8285EB0038B78F /* PerformanceView.swift in Sources */,
 				43F4DFC02B816A9C0033CE55 /* TomorrowView.swift in Sources */,

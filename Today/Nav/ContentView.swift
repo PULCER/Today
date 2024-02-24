@@ -13,6 +13,8 @@ struct ContentView: View {
             PerformanceView()
         case .settings:
             SettingsView()
+        case .recurring:
+            RecurringView()
         }
     }
 }

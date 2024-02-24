@@ -16,21 +16,23 @@ final class ToDoListItem {
   }
 }
 
+import Foundation
+
 @Model
 final class RecurringTaskItem {
     var id = UUID()
     var timestamp: Date = Date()
     var recurringToDoItemText: String = ""
-    var isCompleted: Bool = false
+    var completionDates: [Date] = [] // Store completion dates here
     var taskFrequency: String = "Daily"
     var interval: Int = 1
     var priorityTask: Bool = false
 
-    init(id: UUID = UUID(), timestamp: Date, recurringToDoItemText: String, isCompleted: Bool, taskFrequency: String, interval: Int, priorityTask: Bool) {
+    init(id: UUID = UUID(), timestamp: Date, recurringToDoItemText: String, completionDates: [Date] = [], taskFrequency: String, interval: Int, priorityTask: Bool) {
         self.id = id
         self.timestamp = timestamp
         self.recurringToDoItemText = recurringToDoItemText
-        self.isCompleted = isCompleted
+        self.completionDates = completionDates
         self.taskFrequency = taskFrequency
         self.interval = interval
         self.priorityTask = priorityTask

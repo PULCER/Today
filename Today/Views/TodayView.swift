@@ -8,6 +8,7 @@ struct TodayView: View {
     @State private var newToDoText = ""
     @State private var showingAddToDo = false
     @AppStorage("swipeSensitivity") private var swipeSensitivity: Double = 20.0 
+    @Query private var recurringTasks: [RecurringTaskItem]
     
     private var todaysTasks: [ToDoListItem] {
             let calendar = Calendar.current

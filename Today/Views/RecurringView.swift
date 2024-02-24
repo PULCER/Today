@@ -156,12 +156,12 @@ struct RecurringView: View {
     }
     
     private func addRecurringTask() {
-        withAnimation {
-            let newTask = RecurringTaskItem(timestamp: Date(), recurringToDoItemText: newRecurringTaskText, isCompleted: false, taskFrequency: selectedFrequency.rawValue, interval: interval, priorityTask: isPriorityTask)
-            modelContext.insert(newTask)
-            resetInputFields()
+            withAnimation {
+                let newTask = RecurringTaskItem(timestamp: Date(), recurringToDoItemText: newRecurringTaskText, taskFrequency: selectedFrequency.rawValue, interval: interval, priorityTask: isPriorityTask)
+                modelContext.insert(newTask)
+                resetInputFields()
+            }
         }
-    }
     
     private func deleteItems(offsets: IndexSet) {
         withAnimation {
@@ -173,9 +173,9 @@ struct RecurringView: View {
     }
     
     private func resetInputFields() {
-        newRecurringTaskText = ""
-        selectedFrequency = .daily
-        interval = 1
-        isPriorityTask = false
-    }
+            newRecurringTaskText = ""
+            selectedFrequency = .daily
+            interval = 1
+            isPriorityTask = false
+        }
 }

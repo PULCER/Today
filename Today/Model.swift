@@ -24,6 +24,7 @@ final class RecurringTaskItem {
     var isCompleted: Bool = false
     var taskFrequency: String = "Daily"
     var interval: Int = 1
+    var priorityTask: Bool = false
 
     init(id: UUID = UUID(), timestamp: Date, recurringToDoItemText: String, isCompleted: Bool, taskFrequency: String, interval: Int) {
         self.id = id
@@ -32,6 +33,7 @@ final class RecurringTaskItem {
         self.isCompleted = isCompleted
         self.taskFrequency = taskFrequency
         self.interval = interval
+        self.priorityTask = priorityTask
     }
 }
 

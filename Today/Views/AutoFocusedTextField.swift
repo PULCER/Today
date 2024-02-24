@@ -18,29 +18,32 @@ struct AutoFocusTextField: UIViewRepresentable {
     var placeholder: String
 
     func makeCoordinator() -> Coordinator {
-        return Coordinator(text: $text)
+        Coordinator(text: $text)
     }
 
     func makeUIView(context: Context) -> UITextField {
-           let textField = UITextField()
-           textField.delegate = context.coordinator
-           textField.placeholder = placeholder
-           textField.setContentCompressionResistancePriority(.defaultLow, for: .horizontal) // Allow shrinking
-           return textField
-       }
+        let textField = UITextField()
+        textField.delegate = context.coordinator
+        textField.placeholder = placeholder 
+        textField.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+        return textField
+    }
 
-       func updateUIView(_ uiView: UITextField, context: Context) {
-           uiView.text = text
+    func updateUIView(_ uiView: UITextField, context: Context) {
+        uiView.text = text
 
-           // Dynamic Height Adjustment
-           let size = uiView.sizeThatFits(CGSize(width: uiView.frame.width, height: .infinity))
-           if size.height > uiView.frame.height * 1.5 { // Adjust if > ~1.5 lines
-               uiView.frame.size.height = size.height
-           }
+        let size = uiView.sizeThatFits(CGSize(width: uiView.frame.width, height: .infinity))
+        if size.height > uiView.frame.height * 1.5 {
+            uiView.frame.size.height = size.height
+        }
 
-           if !context.coordinator.didBecomeFirstResponder {
-               uiView.becomeFirstResponder()
-               context.coordinator.didBecomeFirstResponder = true
-           }
-       }
+        if !context.coordinator.didBecomeFirstResponder {
+            uiView.becomeFirstResponder()
+            context.coordinator.didBecomeFirstResponder = true
+        }
+    }
+
+    func resetFocusState(context: Context) {
+        context.coordinator.didBecomeFirstResponder = false
+    }
 }

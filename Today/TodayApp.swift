@@ -9,6 +9,7 @@ struct TodayApp: App {
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
             ToDoListItem.self,
+            RecurringTaskItem.self,
         ])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 

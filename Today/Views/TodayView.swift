@@ -50,31 +50,39 @@ struct TodayView: View {
             }
             Spacer()
             
-            HStack {
+            VStack {
                 
                 Button(action: {
-                    navigationViewModel.currentScreen = .performance
+                    navigationViewModel.currentScreen = .recurring
                 }) {
-                    Image(systemName: "chevron.backward")
+                    Image(systemName: "chevron.up")
                 }.padding()
                 
-                Button(action: {
-                    self.showingAddToDo = true
-                }) {
-                    Image(systemName: "plus.circle.fill")
-                        .resizable()
-                        .frame(width: 48, height: 48)
-                        .foregroundColor(.blue)
-                        .padding()
+                HStack {
+                    
+                    Button(action: {
+                        navigationViewModel.currentScreen = .performance
+                    }) {
+                        Image(systemName: "chevron.backward")
+                    }.padding()
+                    
+                    Button(action: {
+                        self.showingAddToDo = true
+                    }) {
+                        Image(systemName: "plus.circle.fill")
+                            .resizable()
+                            .frame(width: 48, height: 48)
+                            .foregroundColor(.blue)
+                            .padding()
+                    }
+                    
+                    Button(action: {
+                        navigationViewModel.currentScreen = .tomorrow
+                    }) {
+                        Image(systemName: "chevron.forward")
+                    }.padding()
                 }
-                
-                Button(action: {
-                    navigationViewModel.currentScreen = .tomorrow
-                }) {
-                    Image(systemName: "chevron.forward")
-                }.padding()
             }
-            
         }
         .gesture(DragGesture(minimumDistance: swipeSensitivity, coordinateSpace: .local)
                     .onEnded { value in

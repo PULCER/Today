@@ -54,30 +54,38 @@ struct TomorrowView: View {
             }
             Spacer()
             
-            HStack {
+            VStack {
                 
                 Button(action: {
-                    navigationViewModel.currentScreen = .today
+                    navigationViewModel.currentScreen = .recurring
                 }) {
-                    Image(systemName: "chevron.backward")
+                    Image(systemName: "chevron.up")
                 }.padding()
                 
-                Button(action: {
-                    self.showingAddToDo = true
-                }) {
-                    Image(systemName: "plus.circle.fill")
-                        .resizable()
-                        .frame(width: 48, height: 48)
-                        .foregroundColor(.blue)
-                        .padding()
+                HStack {
+                    
+                    Button(action: {
+                        navigationViewModel.currentScreen = .today
+                    }) {
+                        Image(systemName: "chevron.backward")
+                    }.padding()
+                    
+                    Button(action: {
+                        self.showingAddToDo = true
+                    }) {
+                        Image(systemName: "plus.circle.fill")
+                            .resizable()
+                            .frame(width: 48, height: 48)
+                            .foregroundColor(.blue)
+                            .padding()
+                    }
+                    
+                    Button(action: {
+                        navigationViewModel.currentScreen = .tomorrow
+                    }) {
+                        Image(systemName: "chevron.forward")
+                    }.padding().opacity(0)
                 }
-                
-                Button(action: {
-                    navigationViewModel.currentScreen = .tomorrow
-                }) {
-                    Image(systemName: "chevron.forward")
-                }.padding()
-                    .opacity(0)
             }
             
         }

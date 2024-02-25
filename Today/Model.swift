@@ -35,8 +35,9 @@ public enum ToDoItemType: String {
 
 
 public enum TaskFrequency: String, CaseIterable {
-    case daily = "Daily"
-    case weekly = "Weekly"
-    case monthly = "Monthly"
-    case yearly = "Yearly"
+    case daily = "Day"
+    case weekly = "Week"
+    case biweekly = "2 Weeks"
+    case monthly = "Month"
+    case yearly = "Year"
 }

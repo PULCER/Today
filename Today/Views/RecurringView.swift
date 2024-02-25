@@ -16,7 +16,6 @@ struct RecurringView: View {
         toDoListItems.filter { $0.itemType == ToDoItemType.recurring.rawValue }
     }
 
-    
     var body: some View {
         VStack {
             Text("Recurring")

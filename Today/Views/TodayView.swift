@@ -164,10 +164,9 @@ struct TodayView: View {
     private func deleteItems(offsets: IndexSet) {
         withAnimation {
             offsets.forEach { offset in
-                let idToDelete = todaysTasks[offset].id
-                if let indexToDelete = toDoListItems.firstIndex(where: { $0.id == idToDelete }) {
-                    let itemToDelete = toDoListItems[indexToDelete]
-                    modelContext.delete(itemToDelete)
+                let taskToDelete = todaysTasks[offset]
+                if taskToDelete.itemType != ToDoItemType.recurring.rawValue {
+                    modelContext.delete(taskToDelete)
                 }
             }
         }

@@ -146,8 +146,7 @@ struct TomorrowView: View {
                                        itemType: ToDoItemType.regular.rawValue,
                                        completionDates: [],
                                        taskFrequency: TaskFrequency.daily.rawValue,
-                                       interval: 1,
-                                       priorityTask: false)
+                                       interval: 1)
             modelContext.insert(newItem)
             newToDoText = "" 
         }

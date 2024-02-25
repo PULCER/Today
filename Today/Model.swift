@@ -11,9 +11,8 @@ final class ToDoListItem {
     var completionDates: [Date] = []
     var taskFrequency: String = "Daily"
     var interval: Int = 1
-    var priorityTask: Bool = false
     
-    init(id: UUID, timestamp: Date, toDoListText: String, isCompleted: Bool, itemType: String, completionDates: [Date], taskFrequency: String, interval: Int, priorityTask: Bool) {
+    init(id: UUID, timestamp: Date, toDoListText: String, isCompleted: Bool, itemType: String, completionDates: [Date], taskFrequency: String, interval: Int) {
         self.id = id
         self.timestamp = timestamp
         self.toDoListText = toDoListText
@@ -22,7 +21,6 @@ final class ToDoListItem {
         self.completionDates = completionDates
         self.taskFrequency = taskFrequency
         self.interval = interval
-        self.priorityTask = priorityTask
     }
 }
 

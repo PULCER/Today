@@ -45,7 +45,6 @@ struct TodayView: View {
                             Text(item.toDoListText)
                                 .font(.title3)
                                 .bold()
-                                .foregroundColor(item.priorityTask ? .red : .primary)
                             
                             if item.itemType == ToDoItemType.recurring.rawValue {
                                 let completionCount = currentPeriodCompletionCount(task: item)
@@ -174,8 +173,7 @@ struct TodayView: View {
                                        itemType: ToDoItemType.regular.rawValue,
                                        completionDates: [],
                                        taskFrequency: TaskFrequency.daily.rawValue,
-                                       interval: 1,
-                                       priorityTask: false)
+                                       interval: 1)
             modelContext.insert(newItem)
             newToDoText = ""
         }

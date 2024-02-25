@@ -10,7 +10,6 @@ struct RecurringView: View {
     @State private var interval = 1
     @AppStorage("swipeSensitivity") private var swipeSensitivity: Double = 20.0
     @Query private var toDoListItems: [ToDoListItem]
-    @State private var isPriorityTask = false
     
     private var recurringTasks: [ToDoListItem] {
         toDoListItems.filter { $0.itemType == ToDoItemType.recurring.rawValue }
@@ -23,13 +22,12 @@ struct RecurringView: View {
                 .fontWeight(.bold)
             
             List {
-                ForEach(recurringTasks.sorted(by: { $0.priorityTask && !$1.priorityTask })) { task in
+                ForEach(recurringTasks) { task in
                     HStack {
                         VStack(alignment: .leading) {
                             Text(task.toDoListText) 
                                 .font(.title3)
                                 .bold()
-                                .foregroundColor(task.priorityTask ? .red : .primary)
                             
                             Text("\(intervalDescription(task.interval)) Per \(frequencyDescription(TaskFrequency(rawValue: task.taskFrequency) ?? .daily))")
                                 .font(.caption)
@@ -90,9 +88,6 @@ struct RecurringView: View {
                 }
                 .padding()
                 
-                
-                Toggle("Priority Task", isOn: $isPriorityTask) .padding()
-                
                 Spacer()
                 
                 HStack {
@@ -128,8 +123,7 @@ struct RecurringView: View {
                                        itemType: ToDoItemType.recurring.rawValue, // Set as "Recurring"
                                        completionDates: [],
                                        taskFrequency: selectedFrequency.rawValue,
-                                       interval: interval,
-                                       priorityTask: isPriorityTask)
+                                       interval: interval)
             modelContext.insert(newTask)
             resetInputFields()
         }
@@ -148,6 +142,5 @@ struct RecurringView: View {
             newRecurringTaskText = ""
             selectedFrequency = .daily
             interval = 1
-            isPriorityTask = false
         }
 }

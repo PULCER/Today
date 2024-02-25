@@ -9,6 +9,13 @@ struct TodayView: View {
     @State private var showingAddToDo = false
     @AppStorage("swipeSensitivity") private var swipeSensitivity: Double = 20.0
     
+    @State private var _firstDayOfWeekDebug: Void = {
+           let calendar = Calendar.current
+           let firstDayOfWeek = calendar.firstWeekday
+           let dayName = DateFormatter().weekdaySymbols[firstDayOfWeek - 1] // Adjusting for index starting at 0
+           print("The first day of the week is: \(firstDayOfWeek), which is \(dayName)")
+       }()
+    
     private var todaysTasks: [ToDoListItem] {
         let calendar = Calendar.current
         return toDoListItems.filter { item in
@@ -52,6 +59,7 @@ struct TodayView: View {
                             Text(item.toDoListText)
                                 .font(.title3)
                                 .bold()
+                                .foregroundColor(isTaskUrgent(task: item) ? .red : .primary)
                             
                             if item.itemType == ToDoItemType.recurring.rawValue {
                                 let completionCount = currentPeriodCompletionCount(task: item)
@@ -248,4 +256,61 @@ struct TodayView: View {
             }
         }
     }
+    
+    func isTaskUrgent(task: ToDoListItem) -> Bool {
+        guard task.itemType == ToDoItemType.recurring.rawValue else {
+            return false
+        }
+        
+        let calendar = Calendar.current
+        let now = Date()
+        var timeLeftInCurrentInterval = 0
+        var completionCountThisInterval = 0
+        
+        switch TaskFrequency(rawValue: task.taskFrequency) {
+        case .daily:
+            timeLeftInCurrentInterval = 1
+        case .weekly:
+            let dayOfWeek = calendar.component(.weekday, from: now)
+            timeLeftInCurrentInterval = 7 - dayOfWeek
+        case .biweekly:
+            let weekOfYear = calendar.component(.weekOfYear, from: now)
+            timeLeftInCurrentInterval = (weekOfYear % 2 == 0 ? 14 : 7) - calendar.component(.weekday, from: now)
+        case .monthly:
+            let daysInMonth = calendar.range(of: .day, in: .month, for: now)?.count ?? 30
+            let dayOfMonth = calendar.component(.day, from: now)
+            timeLeftInCurrentInterval = daysInMonth - dayOfMonth
+        case .yearly:
+            let dayOfYear = calendar.ordinality(of: .day, in: .year, for: now) ?? 0
+            let daysInYear = calendar.range(of: .day, in: .year, for: now)?.count ?? 365
+            timeLeftInCurrentInterval = daysInYear - dayOfYear
+        default:
+            break
+        }
+        
+        completionCountThisInterval = task.completionDates.filter { date in
+            switch TaskFrequency(rawValue: task.taskFrequency) {
+            case .daily:
+                return calendar.isDate(date, inSameDayAs: now)
+            case .weekly:
+                return calendar.isDate(date, equalTo: now, toGranularity: .weekOfYear)
+            case .biweekly:
+                // Check if within the current or previous week for biweekly period
+                let weekOfYear = calendar.component(.weekOfYear, from: now)
+                let completionWeekOfYear = calendar.component(.weekOfYear, from: date)
+                return abs(weekOfYear - completionWeekOfYear) <= 1
+            case .monthly:
+                return calendar.isDate(date, equalTo: now, toGranularity: .month)
+            case .yearly:
+                return calendar.isDate(date, equalTo: now, toGranularity: .year)
+            default:
+                return false
+            }
+        }.count
+        
+        let completionsNeeded = task.interval - completionCountThisInterval
+        return timeLeftInCurrentInterval <= completionsNeeded
+    }
+
+    
 }

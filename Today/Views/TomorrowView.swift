@@ -131,7 +131,15 @@ struct TomorrowView: View {
         withAnimation {
             let calendar = Calendar.current
             let tomorrow = calendar.date(byAdding: .day, value: 1, to: Date())!
-            let newItem = ToDoListItem(timestamp: tomorrow, toDoListText: newToDoText, isCompleted: false)
+            let newItem = ToDoListItem(id: UUID(),
+                                       timestamp: tomorrow,
+                                       toDoListText: newToDoText,
+                                       isCompleted: false,
+                                       itemType: ToDoItemType.regular.rawValue,
+                                       completionDates: [],
+                                       taskFrequency: TaskFrequency.daily.rawValue,
+                                       interval: 1,
+                                       priorityTask: false)
             modelContext.insert(newItem)
             newToDoText = "" 
         }

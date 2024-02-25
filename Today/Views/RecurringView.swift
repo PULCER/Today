@@ -9,8 +9,13 @@ struct RecurringView: View {
     @State private var selectedFrequency = TaskFrequency.daily
     @State private var interval = 1
     @AppStorage("swipeSensitivity") private var swipeSensitivity: Double = 20.0
-    @Query private var recurringTasks: [RecurringTaskItem]
+    @Query private var toDoListItems: [ToDoListItem]
     @State private var isPriorityTask = false
+    
+    private var recurringTasks: [ToDoListItem] {
+        toDoListItems.filter { $0.itemType == ToDoItemType.recurring.rawValue }
+    }
+
     
     var body: some View {
         VStack {
@@ -22,7 +27,7 @@ struct RecurringView: View {
                 ForEach(recurringTasks.sorted(by: { $0.priorityTask && !$1.priorityTask })) { task in
                     HStack {
                         VStack(alignment: .leading) {
-                            Text(task.recurringToDoItemText)
+                            Text(task.toDoListText) 
                                 .font(.title3)
                                 .bold()
                                 .foregroundColor(task.priorityTask ? .red : .primary)
@@ -156,12 +161,22 @@ struct RecurringView: View {
     }
     
     private func addRecurringTask() {
-            withAnimation {
-                let newTask = RecurringTaskItem(timestamp: Date(), recurringToDoItemText: newRecurringTaskText, taskFrequency: selectedFrequency.rawValue, interval: interval, priorityTask: isPriorityTask)
-                modelContext.insert(newTask)
-                resetInputFields()
-            }
+        withAnimation {
+            // Create a new ToDoListItem for a recurring task
+            let newTask = ToDoListItem(id: UUID(),
+                                       timestamp: Date(),
+                                       toDoListText: newRecurringTaskText,
+                                       isCompleted: false,
+                                       itemType: ToDoItemType.recurring.rawValue, // Set as "Recurring"
+                                       completionDates: [],
+                                       taskFrequency: selectedFrequency.rawValue,
+                                       interval: interval,
+                                       priorityTask: isPriorityTask)
+            modelContext.insert(newTask)
+            resetInputFields()
         }
+    }
+
     
     private func deleteItems(offsets: IndexSet) {
         withAnimation {

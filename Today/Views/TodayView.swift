@@ -9,13 +9,6 @@ struct TodayView: View {
     @State private var showingAddToDo = false
     @AppStorage("swipeSensitivity") private var swipeSensitivity: Double = 20.0
     
-    @State private var _firstDayOfWeekDebug: Void = {
-           let calendar = Calendar.current
-           let firstDayOfWeek = calendar.firstWeekday
-           let dayName = DateFormatter().weekdaySymbols[firstDayOfWeek - 1] // Adjusting for index starting at 0
-           print("The first day of the week is: \(firstDayOfWeek), which is \(dayName)")
-       }()
-    
     private var todaysTasks: [ToDoListItem] {
         let calendar = Calendar.current
         return toDoListItems.filter { item in

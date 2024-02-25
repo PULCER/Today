@@ -10,27 +10,34 @@ struct TodayView: View {
     @AppStorage("swipeSensitivity") private var swipeSensitivity: Double = 20.0
     
     private var todaysTasks: [ToDoListItem] {
-           let calendar = Calendar.current
-           return toDoListItems.filter { item in
-               guard item.itemType != ToDoItemType.timeless.rawValue else {
-                   return false
-               }
-               
-               if item.itemType == ToDoItemType.recurring.rawValue {
-                   return needsCompletion(task: item)
-               } else {
-                   return calendar.isDate(item.timestamp, inSameDayAs: Date())
-               }
-           }.sorted { item1, item2 in
-               if item1.isCompleted && !item2.isCompleted {
-                   return false
-               } else if !item1.isCompleted && item2.isCompleted {
-                   return true
-               } else {
-                   return item1.timestamp < item2.timestamp
-               }
-           }
-       }
+        let calendar = Calendar.current
+        return toDoListItems.filter { item in
+            guard item.itemType != ToDoItemType.timeless.rawValue else {
+                return false
+            }
+            
+            if item.itemType == ToDoItemType.recurring.rawValue {
+                return needsCompletion(task: item)
+            } else {
+                return calendar.isDate(item.timestamp, inSameDayAs: Date())
+            }
+        }.sorted { item1, item2 in
+            if item1.itemType == ToDoItemType.recurring.rawValue && item2.itemType != ToDoItemType.recurring.rawValue {
+                return false
+            } else if item1.itemType != ToDoItemType.recurring.rawValue && item2.itemType == ToDoItemType.recurring.rawValue {
+                return true
+            }
+            
+            if item1.isCompleted && !item2.isCompleted {
+                return false
+            } else if !item1.isCompleted && item2.isCompleted {
+                return true
+            } else {
+                return item1.timestamp < item2.timestamp
+            }
+        }
+    }
+
     
     var body: some View {
         VStack {

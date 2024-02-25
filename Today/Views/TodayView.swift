@@ -7,26 +7,30 @@ struct TodayView: View {
     @Query private var toDoListItems: [ToDoListItem]
     @State private var newToDoText = ""
     @State private var showingAddToDo = false
-    @AppStorage("swipeSensitivity") private var swipeSensitivity: Double = 20.0 
-   
+    @AppStorage("swipeSensitivity") private var swipeSensitivity: Double = 20.0
+    
     private var todaysTasks: [ToDoListItem] {
-            let calendar = Calendar.current
-        let filteredItems = toDoListItems.filter { item in
-                guard item.itemType == ToDoItemType.recurring.rawValue else {
-                    return calendar.isDate(item.timestamp, inSameDayAs: Date())
-                }
-                return needsCompletion(task: item)
-            }
-            return filteredItems.sorted { item1, item2 in
-                if item1.isCompleted && !item2.isCompleted {
-                    return false
-                } else if !item1.isCompleted && item2.isCompleted {
-                    return true
-                } else {
-                    return item1.timestamp < item2.timestamp
-                }
-            }
-        }
+           let calendar = Calendar.current
+           return toDoListItems.filter { item in
+               guard item.itemType != ToDoItemType.timeless.rawValue else {
+                   return false
+               }
+               
+               if item.itemType == ToDoItemType.recurring.rawValue {
+                   return needsCompletion(task: item)
+               } else {
+                   return calendar.isDate(item.timestamp, inSameDayAs: Date())
+               }
+           }.sorted { item1, item2 in
+               if item1.isCompleted && !item2.isCompleted {
+                   return false
+               } else if !item1.isCompleted && item2.isCompleted {
+                   return true
+               } else {
+                   return item1.timestamp < item2.timestamp
+               }
+           }
+       }
     
     var body: some View {
         VStack {
@@ -35,56 +39,56 @@ struct TodayView: View {
                 .fontWeight(.bold)
             
             List {
-                           ForEach(todaysTasks) { item in
-                               HStack {
-                                   VStack(alignment: .leading) {
-                                       Text(item.toDoListText)
-                                           .font(.title3)
-                                           .bold()
-                                           .foregroundColor(item.priorityTask ? .red : .primary)
-                                       
-                                       if item.itemType == ToDoItemType.recurring.rawValue {
-                                           let completionCount = currentPeriodCompletionCount(task: item)
-                                           Text("\(intervalDescription(item.interval)) Per \(frequencyDescription(TaskFrequency(rawValue: item.taskFrequency) ?? .daily)) (\(completionCount)/\(item.interval))")
-                                               .font(.caption)
-                                       }
-
-                                   }
-                                   
-                                   Spacer()
-                                   
-                                   if item.itemType == ToDoItemType.recurring.rawValue {
-                                       Image(systemName: "arrow.triangle.2.circlepath")
-                                           .font(.caption2)
-                                   }
-                                   Button(action: {
-                                       if item.itemType == ToDoItemType.recurring.rawValue {
-                                           let calendar = Calendar.current
-                                           if let index = item.completionDates.firstIndex(where: { completionDate in
-                                                 calendar.isDate(completionDate, inSameDayAs: Date())
-                                           }) {
-                                               item.completionDates.remove(at: index)
-                                           } else {
-                                               item.completionDates.append(Date())
-                                           }
-                                       } else {
-                                           item.isCompleted.toggle()
-                                       }
-                                   }) {
-                                       Image(systemName: isCompletedToday(task: item) ? "checkmark.circle.fill" : "circle")
-                                   }
-
-
-                               }
-                           }
-                           .onDelete(perform: deleteItems)
-                       }
+                ForEach(todaysTasks) { item in
+                    HStack {
+                        VStack(alignment: .leading) {
+                            Text(item.toDoListText)
+                                .font(.title3)
+                                .bold()
+                                .foregroundColor(item.priorityTask ? .red : .primary)
+                            
+                            if item.itemType == ToDoItemType.recurring.rawValue {
+                                let completionCount = currentPeriodCompletionCount(task: item)
+                                Text("\(intervalDescription(item.interval)) Per \(frequencyDescription(TaskFrequency(rawValue: item.taskFrequency) ?? .daily)) (\(completionCount)/\(item.interval))")
+                                    .font(.caption)
+                            }
+                            
+                        }
+                        
+                        Spacer()
+                        
+                        if item.itemType == ToDoItemType.recurring.rawValue {
+                            Image(systemName: "arrow.triangle.2.circlepath")
+                                .font(.caption2)
+                        }
+                        Button(action: {
+                            if item.itemType == ToDoItemType.recurring.rawValue {
+                                let calendar = Calendar.current
+                                if let index = item.completionDates.firstIndex(where: { completionDate in
+                                    calendar.isDate(completionDate, inSameDayAs: Date())
+                                }) {
+                                    item.completionDates.remove(at: index)
+                                } else {
+                                    item.completionDates.append(Date())
+                                }
+                            } else {
+                                item.isCompleted.toggle()
+                            }
+                        }) {
+                            Image(systemName: isCompletedToday(task: item) ? "checkmark.circle.fill" : "circle")
+                        }
+                        
+                        
+                    }
+                }
+                .onDelete(perform: deleteItems)
+            }
             Spacer()
             
             VStack {
                 
                 Button(action: {
-                    navigationViewModel.currentScreen = .recurring
+                    navigationViewModel.currentScreen = .timeless
                 }) {
                     Image(systemName: "chevron.up")
                 }.padding()
@@ -116,13 +120,13 @@ struct TodayView: View {
             }
         }
         .gesture(DragGesture(minimumDistance: swipeSensitivity, coordinateSpace: .local)
-                    .onEnded { value in
-                        if value.translation.width < 0 {
-                            navigationViewModel.currentScreen = .tomorrow
-                        } else if value.translation.width > 0 {
-                            navigationViewModel.currentScreen = .performance
-                        }
-                    })
+            .onEnded { value in
+                if value.translation.width < 0 {
+                    navigationViewModel.currentScreen = .tomorrow
+                } else if value.translation.width > 0 {
+                    navigationViewModel.currentScreen = .performance
+                }
+            })
         .sheet(isPresented: $showingAddToDo) {
             
             VStack {
@@ -201,14 +205,14 @@ struct TodayView: View {
         guard task.itemType == ToDoItemType.recurring.rawValue else {
             return task.isCompleted
         }
-
+        
         let calendar = Calendar.current
         return task.completionDates.contains { completionDate in
             calendar.isDate(completionDate, inSameDayAs: Date())
         }
     }
-
-
+    
+    
     func currentPeriodCompletionCount(task: ToDoListItem) -> Int {
         let calendar = Calendar.current
         let now = Date()
@@ -227,7 +231,7 @@ struct TodayView: View {
             }
         }.count
     }
-
+    
     
     private func deleteItems(offsets: IndexSet) {
         withAnimation {

@@ -7,6 +7,7 @@ class NavigationViewModel: ObservableObject {
         case performance
         case settings
         case recurring
+        case timeless
     }
     @Published var currentScreen: Screen = .today
 }

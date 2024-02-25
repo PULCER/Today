@@ -45,9 +45,9 @@ struct RecurringView: View {
             
             HStack {
                 Button(action: {
-                    navigationViewModel.currentScreen = .today
+                    navigationViewModel.currentScreen = .timeless
                 }) {
-                    Image(systemName: "chevron.down")
+                    Image(systemName: "chevron.left")
                 }.padding()
                 
                 Button(action: {
@@ -61,7 +61,7 @@ struct RecurringView: View {
                 }
                 
                 Button(action: {
-                    navigationViewModel.currentScreen = .today
+                    navigationViewModel.currentScreen = .tomorrow
                 }) {
                     Image(systemName: "chevron.down")
                 }.padding()

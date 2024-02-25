@@ -15,6 +15,8 @@ struct ContentView: View {
             SettingsView()
         case .recurring:
             RecurringView()
+        case .timeless:
+            TimelessView()
         }
     }
 }

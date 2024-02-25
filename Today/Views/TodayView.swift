@@ -32,22 +32,36 @@ struct TodayView: View {
                 .fontWeight(.bold)
             
             List {
-                ForEach(todaysTasks) { item in
-                    HStack {
-                        VStack(alignment: .leading) {
-                            Text(item.toDoListText).font(.title3)
-                        }
-                        Spacer()
-                        
-                        Button(action: {
-                            item.isCompleted.toggle()
-                        }) {
-                            Image(systemName: item.isCompleted ? "checkmark.circle.fill" : "circle")
-                        }
-                    }
-                }
-                .onDelete(perform: deleteItems)
-            }
+                           ForEach(todaysTasks) { item in
+                               HStack {
+                                   VStack(alignment: .leading) {
+                                       Text(item.toDoListText)
+                                           .font(.title3)
+                                           .bold()
+                                           .foregroundColor(item.priorityTask ? .red : .primary)
+                                       
+                                       if item.itemType == ToDoItemType.recurring.rawValue {
+                                                                      Text("\(intervalDescription(item.interval)) Per \(frequencyDescription(TaskFrequency(rawValue: item.taskFrequency) ?? .daily))")
+                                                                          .font(.caption)
+                                                                  }
+                                   }
+                                   
+                                   Spacer()
+                                   
+                                   if item.itemType == ToDoItemType.recurring.rawValue {
+                                       Image(systemName: "arrow.triangle.2.circlepath")
+                                           .font(.caption2)
+                                   }
+                                   
+                                   Button(action: {
+                                       item.isCompleted.toggle()
+                                   }) {
+                                       Image(systemName: item.isCompleted ? "checkmark.circle.fill" : "circle")
+                                   }
+                               }
+                           }
+                           .onDelete(perform: deleteItems)
+                       }
             Spacer()
             
             VStack {

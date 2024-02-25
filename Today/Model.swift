@@ -27,14 +27,14 @@ final class ToDoListItem {
 }
 
 
-enum ToDoItemType: String {
+public enum ToDoItemType: String {
     case regular = "Regular"
     case recurring = "Recurring"
     case timeless = "Timeless"
 }
 
 
-enum TaskFrequency: String, CaseIterable {
+public enum TaskFrequency: String, CaseIterable {
     case daily = "Daily"
     case weekly = "Weekly"
     case monthly = "Monthly"

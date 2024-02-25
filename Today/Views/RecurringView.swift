@@ -119,50 +119,9 @@ struct RecurringView: View {
             .presentationDetents([.height(350)])
         }
     }
-    
-    private func intervalDescription(_ interval: Int) -> String {
-        switch interval {
-        case 1:
-            return "Once"
-        case 2:
-            return "Twice"
-        case 3:
-            return "Three Times"
-        case 4:
-            return "Four Times"
-        case 5:
-            return "Five Times"
-        case 6:
-            return "Six Times"
-        case 7:
-            return "Seven Times"
-        case 8:
-            return "Eight Times"
-        case 9:
-            return "Nine Times"
-        case 10:
-            return "Ten Times"
-        default:
-            return "\(interval) Times"
-        }
-    }
-    
-    private func frequencyDescription(_ frequency: TaskFrequency) -> String {
-        switch frequency {
-        case .daily:
-            return "Day"
-        case .weekly:
-            return "Week"
-        case .monthly:
-            return "Month"
-        case .yearly:
-            return "Year"
-        }
-    }
-    
+        
     private func addRecurringTask() {
         withAnimation {
-            // Create a new ToDoListItem for a recurring task
             let newTask = ToDoListItem(id: UUID(),
                                        timestamp: Date(),
                                        toDoListText: newRecurringTaskText,
@@ -177,7 +136,6 @@ struct RecurringView: View {
         }
     }
 
-    
     private func deleteItems(offsets: IndexSet) {
         withAnimation {
             offsets.forEach { offset in

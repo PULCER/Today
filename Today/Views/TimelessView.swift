@@ -50,7 +50,14 @@ struct TimelessView: View {
                     Image(systemName: "chevron.right")
                 }.padding()
             }
-        }.sheet(isPresented: $showingAddToDo) {
+        }
+        .gesture(DragGesture(minimumDistance: swipeSensitivity, coordinateSpace: .local)
+                    .onEnded { value in
+                        if value.translation.width < 0 {
+                            navigationViewModel.currentScreen = .recurring
+                        }
+                    })
+        .sheet(isPresented: $showingAddToDo) {
             
             VStack {
                 ScrollView(.horizontal) {

@@ -65,6 +65,12 @@ struct RecurringView: View {
                 }.padding()
             }
         }
+        .gesture(DragGesture(minimumDistance: swipeSensitivity, coordinateSpace: .local)
+                    .onEnded { value in
+                        if value.translation.width > 0 {
+                            navigationViewModel.currentScreen = .timeless
+                        } 
+                    })
         .sheet(isPresented: $showingAddRecurringTask, onDismiss: resetInputFields) {
             VStack {
                 ScrollView(.horizontal) {

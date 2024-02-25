@@ -126,13 +126,13 @@ struct TodayView: View {
             }
         }
         .gesture(DragGesture(minimumDistance: swipeSensitivity, coordinateSpace: .local)
-            .onEnded { value in
-                if value.translation.width < 0 {
-                    navigationViewModel.currentScreen = .tomorrow
-                } else if value.translation.width > 0 {
-                    navigationViewModel.currentScreen = .performance
-                }
-            })
+                    .onEnded { value in
+                        if value.translation.width < 0 {
+                            navigationViewModel.currentScreen = .tomorrow
+                        } else if value.translation.width > 0 {
+                            navigationViewModel.currentScreen = .performance
+                        }
+                    })
         .sheet(isPresented: $showingAddToDo) {
             
             VStack {

@@ -11,8 +11,11 @@ struct TodayView: View {
    
     private var todaysTasks: [ToDoListItem] {
             let calendar = Calendar.current
-            let filteredItems = toDoListItems.filter { item in
-                calendar.isDate(item.timestamp, inSameDayAs: Date())
+        let filteredItems = toDoListItems.filter { item in
+                guard item.itemType == ToDoItemType.recurring.rawValue else {
+                    return calendar.isDate(item.timestamp, inSameDayAs: Date())
+                }
+                return needsCompletion(task: item)
             }
             return filteredItems.sorted { item1, item2 in
                 if item1.isCompleted && !item2.isCompleted {
@@ -41,9 +44,11 @@ struct TodayView: View {
                                            .foregroundColor(item.priorityTask ? .red : .primary)
                                        
                                        if item.itemType == ToDoItemType.recurring.rawValue {
-                                                                      Text("\(intervalDescription(item.interval)) Per \(frequencyDescription(TaskFrequency(rawValue: item.taskFrequency) ?? .daily))")
-                                                                          .font(.caption)
-                                                                  }
+                                           let completionCount = currentPeriodCompletionCount(task: item)
+                                           Text("\(intervalDescription(item.interval)) Per \(frequencyDescription(TaskFrequency(rawValue: item.taskFrequency) ?? .daily)) (\(completionCount)/\(item.interval))")
+                                               .font(.caption)
+                                       }
+
                                    }
                                    
                                    Spacer()
@@ -52,12 +57,24 @@ struct TodayView: View {
                                        Image(systemName: "arrow.triangle.2.circlepath")
                                            .font(.caption2)
                                    }
-                                   
                                    Button(action: {
-                                       item.isCompleted.toggle()
+                                       if item.itemType == ToDoItemType.recurring.rawValue {
+                                           let calendar = Calendar.current
+                                           if let index = item.completionDates.firstIndex(where: { completionDate in
+                                                 calendar.isDate(completionDate, inSameDayAs: Date())
+                                           }) {
+                                               item.completionDates.remove(at: index)
+                                           } else {
+                                               item.completionDates.append(Date())
+                                           }
+                                       } else {
+                                           item.isCompleted.toggle()
+                                       }
                                    }) {
-                                       Image(systemName: item.isCompleted ? "checkmark.circle.fill" : "circle")
+                                       Image(systemName: isCompletedToday(task: item) ? "checkmark.circle.fill" : "circle")
                                    }
+
+
                                }
                            }
                            .onDelete(perform: deleteItems)
@@ -158,6 +175,57 @@ struct TodayView: View {
             modelContext.insert(newItem)
             newToDoText = ""
         }
+    }
+    
+    func needsCompletion(task: ToDoListItem) -> Bool {
+        let calendar = Calendar.current
+        let now = Date()
+        let completionCount = task.completionDates.filter { completionDate in
+            switch TaskFrequency(rawValue: task.taskFrequency) {
+            case .daily:
+                return calendar.isDate(completionDate, inSameDayAs: now)
+            case .weekly:
+                return calendar.isDate(completionDate, equalTo: now, toGranularity: .weekOfYear)
+            case .monthly:
+                return calendar.isDate(completionDate, equalTo: now, toGranularity: .month)
+            case .yearly:
+                return calendar.isDate(completionDate, equalTo: now, toGranularity: .year)
+            default:
+                return false
+            }
+        }.count
+        return completionCount < task.interval
+    }
+    
+    func isCompletedToday(task: ToDoListItem) -> Bool {
+        guard task.itemType == ToDoItemType.recurring.rawValue else {
+            return task.isCompleted
+        }
+
+        let calendar = Calendar.current
+        return task.completionDates.contains { completionDate in
+            calendar.isDate(completionDate, inSameDayAs: Date())
+        }
+    }
+
+
+    func currentPeriodCompletionCount(task: ToDoListItem) -> Int {
+        let calendar = Calendar.current
+        let now = Date()
+        return task.completionDates.filter { completionDate in
+            switch TaskFrequency(rawValue: task.taskFrequency) {
+            case .daily:
+                return calendar.isDate(completionDate, inSameDayAs: now)
+            case .weekly:
+                return calendar.isDate(completionDate, equalTo: now, toGranularity: .weekOfYear)
+            case .monthly:
+                return calendar.isDate(completionDate, equalTo: now, toGranularity: .month)
+            case .yearly:
+                return calendar.isDate(completionDate, equalTo: now, toGranularity: .year)
+            default:
+                return false
+            }
+        }.count
     }
 
     

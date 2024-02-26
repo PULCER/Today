@@ -12,7 +12,7 @@ struct TomorrowView: View {
     private var tomorrowsTasks: [ToDoListItem] {
         let calendar = Calendar.current
         let tomorrowStart = calendar.startOfDay(for: calendar.date(byAdding: .day, value: 1, to: Date())!)
-
+        
         return toDoListItems.filter { item in
             calendar.isDate(item.timestamp, inSameDayAs: tomorrowStart)
         }
@@ -26,13 +26,20 @@ struct TomorrowView: View {
             }
         }
     }
-
+    
     
     var body: some View {
         VStack {
-            Text("Tomorrow")
-                .font(.largeTitle)
-                .fontWeight(.bold)
+            VStack{
+                Text("Tomorrow")
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+            }        .gesture(DragGesture(minimumDistance: swipeSensitivity, coordinateSpace: .local)
+                .onEnded { value in
+                    if value.translation.width > 0 {
+                        navigationViewModel.currentScreen = .today
+                    }
+                })
             
             List {
                 ForEach(tomorrowsTasks) { item in
@@ -92,12 +99,6 @@ struct TomorrowView: View {
             }
             
         }
-        .gesture(DragGesture(minimumDistance: swipeSensitivity, coordinateSpace: .local)
-            .onEnded { value in
-                if value.translation.width > 0 {
-                    navigationViewModel.currentScreen = .today
-                }
-            })
         .sheet(isPresented: $showingAddToDo) {
             
             VStack {
@@ -154,7 +155,7 @@ struct TomorrowView: View {
             newToDoText = "" 
         }
     }
-
+    
     
     private func deleteItems(offsets: IndexSet) {
         withAnimation {

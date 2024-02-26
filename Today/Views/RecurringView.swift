@@ -17,10 +17,16 @@ struct RecurringView: View {
 
     var body: some View {
         VStack {
-            Text("Recurring")
-                .font(.largeTitle)
-                .fontWeight(.bold)
-            
+            VStack{
+                Text("Recurring")
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+            }        .gesture(DragGesture(minimumDistance: swipeSensitivity, coordinateSpace: .local)
+                .onEnded { value in
+                    if value.translation.width > 0 {
+                        navigationViewModel.currentScreen = .timeless
+                    }
+                })
             List {
                 ForEach(recurringTasks) { task in
                     HStack {
@@ -67,12 +73,6 @@ struct RecurringView: View {
                 }.padding()
             }
         }
-        .gesture(DragGesture(minimumDistance: swipeSensitivity, coordinateSpace: .local)
-                    .onEnded { value in
-                        if value.translation.width > 0 {
-                            navigationViewModel.currentScreen = .timeless
-                        } 
-                    })
         .sheet(isPresented: $showingAddRecurringTask, onDismiss: resetInputFields) {
             VStack {
                 ScrollView(.horizontal) {

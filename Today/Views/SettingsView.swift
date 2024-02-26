@@ -7,10 +7,16 @@ struct SettingsView: View {
     var body: some View {
         
         VStack{
-            
-            Text("Settings")
-                .font(.largeTitle)
-                .fontWeight(.bold)
+            VStack{
+                Text("Settings")
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+            }.gesture(DragGesture(minimumDistance: swipeSensitivity, coordinateSpace: .local)
+                .onEnded { value in
+                    if value.translation.width < 0 {
+                        navigationViewModel.currentScreen = .performance
+                    }
+                })
             
             Form {
                 Section(header: Text("Swipe Sensitivity")) {
@@ -75,12 +81,7 @@ struct SettingsView: View {
                 }.padding()
                 
             }
-        } .gesture(DragGesture(minimumDistance: swipeSensitivity, coordinateSpace: .local)
-            .onEnded { value in
-                if value.translation.width < 0 {
-                    navigationViewModel.currentScreen = .performance
-                }
-            })
+        }
     }
 }
 

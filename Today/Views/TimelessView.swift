@@ -15,9 +15,16 @@ struct TimelessView: View {
     
     var body: some View {
         VStack {
-            Text("Timeless")
-                .font(.largeTitle)
-                .fontWeight(.bold)
+            VStack{
+                Text("Timeless")
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+            }.gesture(DragGesture(minimumDistance: swipeSensitivity, coordinateSpace: .local)
+                .onEnded { value in
+                    if value.translation.width < 0 {
+                        navigationViewModel.currentScreen = .recurring
+                    }
+                })
             
             List {
                 ForEach(timelessTasks) { item in
@@ -53,12 +60,6 @@ struct TimelessView: View {
                 }.padding()
             }
         }
-        .gesture(DragGesture(minimumDistance: swipeSensitivity, coordinateSpace: .local)
-                    .onEnded { value in
-                        if value.translation.width < 0 {
-                            navigationViewModel.currentScreen = .recurring
-                        }
-                    })
         .sheet(isPresented: $showingAddToDo) {
             
             VStack {

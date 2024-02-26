@@ -41,10 +41,18 @@ struct TodayView: View {
     
     var body: some View {
         VStack {
-            Text("Today")
-                .font(.largeTitle)
-                .fontWeight(.bold)
-            
+            VStack{
+                Text("Today")
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+            }.gesture(DragGesture(minimumDistance: swipeSensitivity, coordinateSpace: .local)
+                .onEnded { value in
+                    if value.translation.width < 0 {
+                        navigationViewModel.currentScreen = .tomorrow
+                    } else if value.translation.width > 0 {
+                        navigationViewModel.currentScreen = .performance
+                    }
+                })
             List {
                 ForEach(todaysTasks) { item in
                     HStack {
@@ -129,14 +137,6 @@ struct TodayView: View {
                 }
             }
         }
-        .gesture(DragGesture(minimumDistance: swipeSensitivity, coordinateSpace: .local)
-                    .onEnded { value in
-                        if value.translation.width < 0 {
-                            navigationViewModel.currentScreen = .tomorrow
-                        } else if value.translation.width > 0 {
-                            navigationViewModel.currentScreen = .performance
-                        }
-                    })
         .sheet(isPresented: $showingAddToDo) {
             
             VStack {

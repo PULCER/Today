@@ -28,9 +28,18 @@ struct PerformanceView: View {
 
     var body: some View {
         VStack {
-            Text("Performance")
-                .font(.largeTitle)
-                .fontWeight(.bold)
+            VStack{
+                Text("Performance")
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+            }.gesture(DragGesture(minimumDistance: swipeSensitivity, coordinateSpace: .local)
+                .onEnded { value in
+                    if value.translation.width < 0 {
+                        navigationViewModel.currentScreen = .today
+                    } else if value.translation.width > 0 {
+                        navigationViewModel.currentScreen = .settings
+                    }
+                })
 
             List {
                 ForEach(pastTasks.keys.sorted().reversed(), id: \.self) { day in
@@ -104,14 +113,7 @@ struct PerformanceView: View {
                 }.padding()
             
             }
-        } .gesture(DragGesture(minimumDistance: swipeSensitivity, coordinateSpace: .local)
-            .onEnded { value in
-                if value.translation.width < 0 {
-                    navigationViewModel.currentScreen = .today
-                } else if value.translation.width > 0 {
-                    navigationViewModel.currentScreen = .settings
-                }
-            })
+        }
     }
 }
 

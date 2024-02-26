@@ -30,12 +30,10 @@ struct TodayView: View {
             } else if !isCompletedToday1 && isCompletedToday2 {
                 return true
             }
-            return item1.timestamp < item2.timestamp
+            return item1.timestamp > item2.timestamp
         }
     }
 
-
-    
     var body: some View {
         VStack {
             VStack{

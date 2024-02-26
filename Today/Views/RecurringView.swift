@@ -136,7 +136,7 @@ struct RecurringView: View {
                 }
             }
             .padding()
-            .presentationDetents([.height(350)])
+            .presentationDetents([.height(250)])
         }
     }
         

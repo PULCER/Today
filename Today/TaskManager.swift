@@ -71,9 +71,6 @@ class TaskManager {
         case .weekly:
             let dayOfWeek = calendar.component(.weekday, from: now)
             timeLeftInCurrentInterval = 7 - dayOfWeek
-        case .biweekly:
-            let weekOfYear = calendar.component(.weekOfYear, from: now)
-            timeLeftInCurrentInterval = (weekOfYear % 2 == 0 ? 14 : 7) - calendar.component(.weekday, from: now)
         case .monthly:
             let daysInMonth = calendar.range(of: .day, in: .month, for: now)?.count ?? 30
             let dayOfMonth = calendar.component(.day, from: now)
@@ -92,11 +89,6 @@ class TaskManager {
                 return calendar.isDate(date, inSameDayAs: now)
             case .weekly:
                 return calendar.isDate(date, equalTo: now, toGranularity: .weekOfYear)
-            case .biweekly:
-                // Check if within the current or previous week for biweekly period
-                let weekOfYear = calendar.component(.weekOfYear, from: now)
-                let completionWeekOfYear = calendar.component(.weekOfYear, from: date)
-                return abs(weekOfYear - completionWeekOfYear) <= 1
             case .monthly:
                 return calendar.isDate(date, equalTo: now, toGranularity: .month)
             case .yearly:

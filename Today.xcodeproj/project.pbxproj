@@ -88,6 +88,7 @@
 				43F4DFC12B81755A0033CE55 /* Views */,
 				43F4DFAD2B8167C00033CE55 /* Model.swift */,
 				437584DF2B8ABD2F0004FEFB /* PublicUtilities.swift */,
+				4389F1E12B8C312100237CCD /* TaskManager.swift */,
 				43AF445A2B898C5100D666C5 /* Nav */,
 				43F4DFAF2B8167C10033CE55 /* Assets.xcassets */,
 				43F4DFB12B8167C10033CE55 /* Today.entitlements */,
@@ -109,7 +110,6 @@
 			isa = PBXGroup;
 			children = (
 				43F4DFAB2B8167C00033CE55 /* TodayView.swift */,
-				4389F1E12B8C312100237CCD /* TaskManager.swift */,
 				43F769192B8B9BAC0001A9F0 /* TimelessView.swift */,
 				43F4DFBF2B816A9C0033CE55 /* TomorrowView.swift */,
 				43AF445B2B898C8300D666C5 /* RecurringView.swift */,

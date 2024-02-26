@@ -98,6 +98,7 @@ struct TodayView: View {
                     navigationViewModel.currentScreen = .timeless
                 }) {
                     Image(systemName: "chevron.up")
+                        .font(.system(size: 26, weight: .bold))
                 }.padding()
                 
                 HStack {
@@ -106,6 +107,7 @@ struct TodayView: View {
                         navigationViewModel.currentScreen = .performance
                     }) {
                         Image(systemName: "chevron.backward")
+                            .font(.system(size: 26, weight: .bold))
                     }.padding()
                     
                     Button(action: {
@@ -122,6 +124,7 @@ struct TodayView: View {
                         navigationViewModel.currentScreen = .tomorrow
                     }) {
                         Image(systemName: "chevron.forward")
+                            .font(.system(size: 26, weight: .bold))
                     }.padding()
                 }
             }

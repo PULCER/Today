@@ -32,6 +32,7 @@ struct TimelessView: View {
                     navigationViewModel.currentScreen = .today
                 }) {
                     Image(systemName: "chevron.down")
+                        .font(.system(size: 26, weight: .bold))
                 }.padding()
                 
                 Button(action: {
@@ -48,6 +49,7 @@ struct TimelessView: View {
                     navigationViewModel.currentScreen = .recurring
                 }) {
                     Image(systemName: "chevron.right")
+                        .font(.system(size: 26, weight: .bold))
                 }.padding()
             }
         }

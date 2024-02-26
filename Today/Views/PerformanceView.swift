@@ -83,6 +83,7 @@ struct PerformanceView: View {
                     navigationViewModel.currentScreen = .settings
                 }) {
                     Image(systemName: "chevron.backward")
+                        .font(.system(size: 26, weight: .bold))
                 }.padding()
                 
                 Button(action: {
@@ -99,6 +100,7 @@ struct PerformanceView: View {
                     navigationViewModel.currentScreen = .today
                 }) {
                     Image(systemName: "chevron.forward")
+                        .font(.system(size: 26, weight: .bold))
                 }.padding()
             
             }

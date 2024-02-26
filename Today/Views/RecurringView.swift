@@ -46,6 +46,7 @@ struct RecurringView: View {
                     navigationViewModel.currentScreen = .timeless
                 }) {
                     Image(systemName: "chevron.left")
+                        .font(.system(size: 26, weight: .bold))
                 }.padding()
                 
                 Button(action: {
@@ -62,6 +63,7 @@ struct RecurringView: View {
                     navigationViewModel.currentScreen = .tomorrow
                 }) {
                     Image(systemName: "chevron.down")
+                        .font(.system(size: 26, weight: .bold))
                 }.padding()
             }
         }

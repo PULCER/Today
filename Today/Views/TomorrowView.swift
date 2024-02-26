@@ -60,6 +60,7 @@ struct TomorrowView: View {
                     navigationViewModel.currentScreen = .recurring
                 }) {
                     Image(systemName: "chevron.up")
+                        .font(.system(size: 26, weight: .bold))
                 }.padding()
                 
                 HStack {
@@ -68,6 +69,7 @@ struct TomorrowView: View {
                         navigationViewModel.currentScreen = .today
                     }) {
                         Image(systemName: "chevron.backward")
+                            .font(.system(size: 26, weight: .bold))
                     }.padding()
                     
                     Button(action: {
@@ -84,6 +86,7 @@ struct TomorrowView: View {
                         navigationViewModel.currentScreen = .tomorrow
                     }) {
                         Image(systemName: "chevron.forward")
+                            .font(.system(size: 26, weight: .bold))
                     }.padding().opacity(0)
                 }
             }

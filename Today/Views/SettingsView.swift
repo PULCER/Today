@@ -53,6 +53,7 @@ struct SettingsView: View {
                     navigationViewModel.currentScreen = .settings
                 }) {
                     Image(systemName: "chevron.backward")
+                        .font(.system(size: 26, weight: .bold))
                 }.padding()
                     .opacity(0)
                 
@@ -70,6 +71,7 @@ struct SettingsView: View {
                     navigationViewModel.currentScreen = .performance
                 }) {
                     Image(systemName: "chevron.forward")
+                        .font(.system(size: 26, weight: .bold))
                 }.padding()
                 
             }

@@ -11,7 +11,9 @@ struct TimelessView: View {
     
     private var timelessTasks: [ToDoListItem] {
         toDoListItems.filter { $0.itemType == ToDoItemType.timeless.rawValue }
+                     .sorted(by: { $0.toDoListText.lowercased() < $1.toDoListText.lowercased() })
     }
+
     
     var body: some View {
         VStack {

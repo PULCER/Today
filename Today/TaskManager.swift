@@ -6,33 +6,24 @@ class TaskManager {
     private init() {}
 
     func needsCompletion(task: ToDoListItem) -> Bool {
-        let calendar = Calendar.current
-        let now = Date()
-
-        let lastPossibleCompletion: Date? = {
-            switch TaskFrequency(rawValue: task.taskFrequency) {
-            case .daily:
-                return calendar.date(byAdding: .day, value: -1, to: now)
-            case .weekly:
-                return calendar.date(byAdding: .weekOfYear, value: -1, to: now)
-            case .monthly:
-                return calendar.date(byAdding: .month, value: -1, to: now)
-            case .yearly:
-                return calendar.date(byAdding: .year, value: -1, to: now)
-            default:
-                return nil
-            }
-        }()
-
-        guard let lastPossibleCompletion = lastPossibleCompletion else { return true }
-
-        let hasRecentCompletion = task.completionDates.contains { completionDate in
-            calendar.isDate(completionDate, inSameDayAs: lastPossibleCompletion)  ||
-            calendar.compare(completionDate, to: lastPossibleCompletion, toGranularity: .day) == .orderedDescending
-        }
-
-        return !hasRecentCompletion
-    }
+          let calendar = Calendar.current
+          let now = Date()
+          let completionCount = task.completionDates.filter { completionDate in
+              switch TaskFrequency(rawValue: task.taskFrequency) {
+              case .daily:
+                  return calendar.isDate(completionDate, inSameDayAs: now)
+              case .weekly:
+                  return calendar.isDate(completionDate, equalTo: now, toGranularity: .weekOfYear)
+              case .monthly:
+                  return calendar.isDate(completionDate, equalTo: now, toGranularity: .month)
+              case .yearly:
+                  return calendar.isDate(completionDate, equalTo: now, toGranularity: .year)
+              default:
+                  return false
+              }
+          }.count
+          return completionCount < task.interval
+      }
 
     func isCompletedToday(task: ToDoListItem) -> Bool {
         guard task.itemType == ToDoItemType.recurring.rawValue else {

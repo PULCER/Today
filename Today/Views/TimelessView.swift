@@ -124,6 +124,5 @@ struct TimelessView: View {
             }
         }
     }
-    
 }
 

@@ -24,7 +24,6 @@ final class ToDoListItem {
     }
 }
 
-
 public enum ToDoItemType: String {
     case regular = "Regular"
     case recurring = "Recurring"

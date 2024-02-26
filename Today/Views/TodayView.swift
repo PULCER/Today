@@ -15,28 +15,28 @@ struct TodayView: View {
             guard item.itemType != ToDoItemType.timeless.rawValue else {
                 return false
             }
-            
+
             if item.itemType == ToDoItemType.recurring.rawValue {
                 return TaskManager.shared.needsCompletion(task: item)
             } else {
                 return calendar.isDate(item.timestamp, inSameDayAs: Date())
             }
         }.sorted { item1, item2 in
-            if item1.itemType == ToDoItemType.recurring.rawValue && item2.itemType != ToDoItemType.recurring.rawValue {
+            // Prioritize tasks by completion status for the current day
+            let isCompletedToday1 = TaskManager.shared.isCompletedToday(task: item1)
+            let isCompletedToday2 = TaskManager.shared.isCompletedToday(task: item2)
+
+            if isCompletedToday1 && !isCompletedToday2 {
                 return false
-            } else if item1.itemType != ToDoItemType.recurring.rawValue && item2.itemType == ToDoItemType.recurring.rawValue {
+            } else if !isCompletedToday1 && isCompletedToday2 {
                 return true
             }
-            
-            if item1.isCompleted && !item2.isCompleted {
-                return false
-            } else if !item1.isCompleted && item2.isCompleted {
-                return true
-            } else {
-                return item1.timestamp < item2.timestamp
-            }
+
+            // If both tasks have the same completion status, sort by timestamp or other criteria
+            return item1.timestamp < item2.timestamp
         }
     }
+
 
     
     var body: some View {

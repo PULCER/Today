@@ -8,21 +8,30 @@ class TaskManager {
     func needsCompletion(task: ToDoListItem) -> Bool {
         let calendar = Calendar.current
         let now = Date()
-        let completionCount = task.completionDates.filter { completionDate in
+
+        let lastPossibleCompletion: Date? = {
             switch TaskFrequency(rawValue: task.taskFrequency) {
             case .daily:
-                return calendar.isDate(completionDate, inSameDayAs: now)
+                return calendar.date(byAdding: .day, value: -1, to: now)
             case .weekly:
-                return calendar.isDate(completionDate, equalTo: now, toGranularity: .weekOfYear)
+                return calendar.date(byAdding: .weekOfYear, value: -1, to: now)
             case .monthly:
-                return calendar.isDate(completionDate, equalTo: now, toGranularity: .month)
+                return calendar.date(byAdding: .month, value: -1, to: now)
             case .yearly:
-                return calendar.isDate(completionDate, equalTo: now, toGranularity: .year)
+                return calendar.date(byAdding: .year, value: -1, to: now)
             default:
-                return false
+                return nil
             }
-        }.count
-        return completionCount < task.interval
+        }()
+
+        guard let lastPossibleCompletion = lastPossibleCompletion else { return true }
+
+        let hasRecentCompletion = task.completionDates.contains { completionDate in
+            calendar.isDate(completionDate, inSameDayAs: lastPossibleCompletion)  ||
+            calendar.compare(completionDate, to: lastPossibleCompletion, toGranularity: .day) == .orderedDescending
+        }
+
+        return !hasRecentCompletion
     }
 
     func isCompletedToday(task: ToDoListItem) -> Bool {

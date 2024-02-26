@@ -51,8 +51,11 @@ struct TodayView: View {
                         navigationViewModel.currentScreen = .tomorrow
                     } else if value.translation.width > 0 {
                         navigationViewModel.currentScreen = .performance
+                    } else if value.translation.height < 0 { // Check for swipe-up gesture
+                        navigationViewModel.currentScreen = .timeless
                     }
                 })
+
             List {
                 ForEach(todaysTasks) { item in
                     HStack {

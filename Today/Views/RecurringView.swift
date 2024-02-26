@@ -27,6 +27,7 @@ struct RecurringView: View {
                         navigationViewModel.currentScreen = .timeless
                     }
                 })
+            
             List {
                 ForEach(recurringTasks) { task in
                     HStack {
@@ -40,6 +41,12 @@ struct RecurringView: View {
                         }
                         
                         Spacer()
+                        
+                        if !TaskManager.shared.needsCompletion(task: task) {
+                                        Image(systemName: "star.fill")
+                                            .foregroundColor(.yellow)
+                                    }
+                        
                         Image(systemName: "arrow.triangle.2.circlepath")
                             .font(.caption2)
                     }

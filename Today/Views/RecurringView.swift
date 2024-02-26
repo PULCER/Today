@@ -54,23 +54,7 @@ struct RecurringView: View {
                 .onDelete(perform: deleteItems)
             }
             
-            HStack {
-                Button(action: {
-                    navigationViewModel.currentScreen = .timeless
-                }) {
-                    Image(systemName: "chevron.left")
-                        .font(.system(size: 26, weight: .bold))
-                }.padding()
-                
-                Button(action: {
-                    self.showingAddRecurringTask = true
-                }) {
-                    Image(systemName: "plus.circle.fill")
-                        .resizable()
-                        .frame(width: 48, height: 48)
-                        .foregroundColor(.blue)
-                        .padding()
-                }
+            VStack {
                 
                 Button(action: {
                     navigationViewModel.currentScreen = .tomorrow
@@ -78,6 +62,33 @@ struct RecurringView: View {
                     Image(systemName: "chevron.down")
                         .font(.system(size: 26, weight: .bold))
                 }.padding()
+                
+                HStack {
+                    
+                    Button(action: {
+                        navigationViewModel.currentScreen = .timeless
+                    }) {
+                        Image(systemName: "chevron.backward")
+                            .font(.system(size: 26, weight: .bold))
+                    }.padding()
+                    
+                    Button(action: {
+                        self.showingAddRecurringTask = true
+                    }) {
+                        Image(systemName: "plus.circle.fill")
+                            .resizable()
+                            .frame(width: 48, height: 48)
+                            .foregroundColor(.blue)
+                            .padding()
+                    }
+                    
+                    Button(action: {
+                        navigationViewModel.currentScreen = .tomorrow
+                    }) {
+                        Image(systemName: "chevron.forward")
+                            .font(.system(size: 26, weight: .bold))
+                    }.padding().opacity(0)
+                }
             }
         }
         .sheet(isPresented: $showingAddRecurringTask, onDismiss: resetInputFields) {

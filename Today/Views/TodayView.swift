@@ -22,7 +22,6 @@ struct TodayView: View {
                 return calendar.isDate(item.timestamp, inSameDayAs: Date())
             }
         }.sorted { item1, item2 in
-            // Prioritize tasks by completion status for the current day
             let isCompletedToday1 = TaskManager.shared.isCompletedToday(task: item1)
             let isCompletedToday2 = TaskManager.shared.isCompletedToday(task: item2)
 
@@ -31,8 +30,6 @@ struct TodayView: View {
             } else if !isCompletedToday1 && isCompletedToday2 {
                 return true
             }
-
-            // If both tasks have the same completion status, sort by timestamp or other criteria
             return item1.timestamp < item2.timestamp
         }
     }
@@ -51,8 +48,6 @@ struct TodayView: View {
                         navigationViewModel.currentScreen = .tomorrow
                     } else if value.translation.width > 0 {
                         navigationViewModel.currentScreen = .performance
-                    } else if value.translation.height < 0 { // Check for swipe-up gesture
-                        navigationViewModel.currentScreen = .timeless
                     }
                 })
 

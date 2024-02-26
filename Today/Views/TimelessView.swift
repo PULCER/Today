@@ -36,7 +36,7 @@ struct TimelessView: View {
                 } .onDelete(perform: deleteItems)
             }
             
-            HStack {
+            VStack {
                 Button(action: {
                     navigationViewModel.currentScreen = .today
                 }) {
@@ -44,22 +44,32 @@ struct TimelessView: View {
                         .font(.system(size: 26, weight: .bold))
                 }.padding()
                 
-                Button(action: {
-                    self.showingAddToDo = true
-                }) {
-                    Image(systemName: "plus.circle.fill")
-                        .resizable()
-                        .frame(width: 48, height: 48)
-                        .foregroundColor(.blue)
-                        .padding()
+                HStack {
+                    
+                    Button(action: {
+                        navigationViewModel.currentScreen = .performance
+                    }) {
+                        Image(systemName: "chevron.backward")
+                            .font(.system(size: 26, weight: .bold))
+                    }.padding().opacity(0)
+                    
+                    Button(action: {
+                        self.showingAddToDo = true
+                    }) {
+                        Image(systemName: "plus.circle.fill")
+                            .resizable()
+                            .frame(width: 48, height: 48)
+                            .foregroundColor(.blue)
+                            .padding()
+                    }
+                    
+                    Button(action: {
+                        navigationViewModel.currentScreen = .recurring
+                    }) {
+                        Image(systemName: "chevron.forward")
+                            .font(.system(size: 26, weight: .bold))
+                    }.padding()
                 }
-                
-                Button(action: {
-                    navigationViewModel.currentScreen = .recurring
-                }) {
-                    Image(systemName: "chevron.right")
-                        .font(.system(size: 26, weight: .bold))
-                }.padding()
             }
         }
         .sheet(isPresented: $showingAddToDo) {

@@ -8,23 +8,24 @@ struct PerformanceView: View {
     @AppStorage("swipeSensitivity") private var swipeSensitivity: Double = 20.0 
 
     private var pastTasks: [Date: [ToDoListItem]] {
-        let tasks = Dictionary(grouping: toDoListItems) { item in
-            Calendar.current.startOfDay(for: item.timestamp)
-        }
-        let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: Calendar.current.startOfDay(for: Date()))!
-        
-        return tasks.filter { $0.key <= yesterday }
-    }
+          let regularTasks = toDoListItems.filter { $0.itemType == ToDoItemType.regular.rawValue }
+          let tasks = Dictionary(grouping: regularTasks) { item in
+              Calendar.current.startOfDay(for: item.timestamp)
+          }
+          let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: Calendar.current.startOfDay(for: Date()))!
+          
+          return tasks.filter { $0.key <= yesterday }
+      }
 
-    private func completedTasksCount(for group: [ToDoListItem]) -> Int {
-        group.filter { $0.isCompleted }.count
-    }
+      private func completedTasksCount(for group: [ToDoListItem]) -> Int {
+          group.filter { $0.isCompleted }.count
+      }
 
-    private func taskCompletionRate(for group: [ToDoListItem]) -> CGFloat {
-        let completedCount = CGFloat(completedTasksCount(for: group))
-        let totalCount = CGFloat(group.count)
-        return totalCount > 0 ? (completedCount / totalCount) : 0
-    }
+      private func taskCompletionRate(for group: [ToDoListItem]) -> CGFloat {
+          let completedCount = CGFloat(completedTasksCount(for: group))
+          let totalCount = CGFloat(group.count)
+          return totalCount > 0 ? (completedCount / totalCount) : 0
+      }
 
     var body: some View {
         VStack {

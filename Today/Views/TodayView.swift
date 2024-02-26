@@ -124,7 +124,6 @@ struct TodayView: View {
                         navigationViewModel.currentScreen = .tomorrow
                     }) {
                         Image(systemName: "chevron.forward")
-                            .font(.system(size: 26, weight: .bold))
                     }.padding()
                 }
             }

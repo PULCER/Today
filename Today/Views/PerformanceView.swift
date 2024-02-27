@@ -20,7 +20,14 @@ struct PerformanceView: View {
       private func completedTasksCount(for group: [ToDoListItem]) -> Int {
           group.filter { $0.isCompleted }.count
       }
-
+    
+    private var overallCompletionRate: CGFloat {
+        let regularTasks = toDoListItems.filter { $0.itemType == ToDoItemType.regular.rawValue }
+        let completedTasks = regularTasks.filter { $0.isCompleted }
+        let completionRate = CGFloat(completedTasks.count) / CGFloat(regularTasks.count)
+        return completionRate.isNaN ? 0 : completionRate // Prevent division by zero
+    }
+    
       private func taskCompletionRate(for group: [ToDoListItem]) -> CGFloat {
           let completedCount = CGFloat(completedTasksCount(for: group))
           let totalCount = CGFloat(group.count)
@@ -41,6 +48,24 @@ struct PerformanceView: View {
                         navigationViewModel.currentScreen = .settings
                     }
                 })
+            
+            
+            
+            ZStack(alignment: .leading) {
+                           RoundedRectangle(cornerRadius: 10)
+                               .frame(height: 20)
+                               .foregroundColor(.gray.opacity(0.3))
+                           RoundedRectangle(cornerRadius: 10)
+                               .frame(width: UIScreen.main.bounds.width * overallCompletionRate, height: 20)
+                               .foregroundColor(.green)
+                       }
+            .padding(.horizontal)
+            
+            Text(String(format: "%.2f%%", overallCompletionRate * 100))
+                .font(.headline)
+                .foregroundColor(.green)
+                .padding(.top)
+            
 
             List {
                 ForEach(pastTasks.keys.sorted().reversed(), id: \.self) { day in

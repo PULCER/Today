@@ -12,8 +12,24 @@ struct RecurringView: View {
     @Query private var toDoListItems: [ToDoListItem]
     
     private var recurringTasks: [ToDoListItem] {
-        toDoListItems.filter { $0.itemType == ToDoItemType.recurring.rawValue }
+        let sortedTasks = toDoListItems.filter { $0.itemType == ToDoItemType.recurring.rawValue }
+            .sorted { task1, task2 in
+                let task1NeedsCompletion = TaskManager.shared.recurringTaskNeedsCompletion(task: task1)
+                let task2NeedsCompletion = TaskManager.shared.recurringTaskNeedsCompletion(task: task2)
+            
+                if task1NeedsCompletion && !task2NeedsCompletion {
+                    return true
+                }
+                else if !task1NeedsCompletion && task2NeedsCompletion {
+                    return false
+                }
+                else {
+                    return task1.toDoListText < task2.toDoListText
+                }
+            }
+        return sortedTasks
     }
+
 
     var body: some View {
         VStack {

@@ -42,7 +42,7 @@ struct RecurringView: View {
                         
                         Spacer()
                         
-                        if !TaskManager.shared.needsCompletion(task: task) {
+                        if !TaskManager.shared.doesRecurringTaskNeedCompletion(task: task) {
                                         Image(systemName: "star.fill")
                                             .foregroundColor(.yellow)
                                     }

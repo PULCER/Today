@@ -17,7 +17,7 @@ struct TodayView: View {
             }
 
             if item.itemType == ToDoItemType.recurring.rawValue {
-                return TaskManager.shared.needsCompletion(task: item)
+                return TaskManager.shared.doesRecurringTaskNeedCompletion(task: item)
             } else {
                 return calendar.isDate(item.timestamp, inSameDayAs: Date())
             }
@@ -59,7 +59,7 @@ struct TodayView: View {
                                 .foregroundColor(TaskManager.shared.isTaskUrgent(task: item) ? .red : .primary)
                             
                             if item.itemType == ToDoItemType.recurring.rawValue {
-                                let completionCount = TaskManager.shared.currentPeriodCompletionCount(task: item)
+                                let completionCount = TaskManager.shared.howManyCompletionsDoesRecurringTaskNeed(task: item)
                                 Text("\(intervalDescription(item.interval)) Per \(frequencyDescription(TaskFrequency(rawValue: item.taskFrequency) ?? .daily)) (\(completionCount)/\(item.interval))")
                                     .font(.caption)
                             }

@@ -2,28 +2,38 @@ import Foundation
 
 class TaskManager {
     static let shared = TaskManager()
-
+    
     private init() {}
-
-    func needsCompletion(task: ToDoListItem) -> Bool {
-          let calendar = Calendar.current
-          let now = Date()
-          let completionCount = task.completionDates.filter { completionDate in
-              switch TaskFrequency(rawValue: task.taskFrequency) {
-              case .daily:
-                  return calendar.isDate(completionDate, inSameDayAs: now)
-              case .weekly:
-                  return calendar.isDate(completionDate, equalTo: now, toGranularity: .weekOfYear)
-              case .monthly:
-                  return calendar.isDate(completionDate, equalTo: now, toGranularity: .month)
-              case .yearly:
-                  return calendar.isDate(completionDate, equalTo: now, toGranularity: .year)
-              default:
-                  return false
-              }
-          }.count
-          return completionCount < task.interval
-      }
+    
+    func isDateInCurrentInterval(_ date: Date, forFrequency frequency: String) -> Bool {
+        let calendar = Calendar.current
+        let now = Date()
+        switch TaskFrequency(rawValue: frequency) {
+        case .daily:
+            return calendar.isDate(date, inSameDayAs: now)
+        case .weekly:
+            return calendar.isDate(date, equalTo: now, toGranularity: .weekOfYear)
+        case .monthly:
+            return calendar.isDate(date, equalTo: now, toGranularity: .month)
+        case .yearly:
+            return calendar.isDate(date, equalTo: now, toGranularity: .year)
+        default:
+            return false
+        }
+    }
+    
+    func doesRecurringTaskNeedCompletion(task: ToDoListItem) -> Bool {
+        let completionCount = task.completionDates.filter {
+            isDateInCurrentInterval($0, forFrequency: task.taskFrequency)
+        }.count
+        return completionCount < task.interval
+    }
+    
+    func howManyCompletionsDoesRecurringTaskNeed(task: ToDoListItem) -> Int {
+        return task.completionDates.filter {
+            isDateInCurrentInterval($0, forFrequency: task.taskFrequency)
+        }.count
+    }
 
     func isCompletedToday(task: ToDoListItem) -> Bool {
         guard task.itemType == ToDoItemType.recurring.rawValue else {
@@ -35,35 +45,15 @@ class TaskManager {
             calendar.isDate(completionDate, inSameDayAs: Date())
         }
     }
-
-    func currentPeriodCompletionCount(task: ToDoListItem) -> Int {
-        let calendar = Calendar.current
-        let now = Date()
-        return task.completionDates.filter { completionDate in
-            switch TaskFrequency(rawValue: task.taskFrequency) {
-            case .daily:
-                return calendar.isDate(completionDate, inSameDayAs: now)
-            case .weekly:
-                return calendar.isDate(completionDate, equalTo: now, toGranularity: .weekOfYear)
-            case .monthly:
-                return calendar.isDate(completionDate, equalTo: now, toGranularity: .month)
-            case .yearly:
-                return calendar.isDate(completionDate, equalTo: now, toGranularity: .year)
-            default:
-                return false
-            }
-        }.count
-    }
-
+    
     func isTaskUrgent(task: ToDoListItem) -> Bool {
         guard task.itemType == ToDoItemType.recurring.rawValue else {
             return false
         }
-        
+
         let calendar = Calendar.current
         let now = Date()
         var timeLeftInCurrentInterval = 0
-        var completionCountThisInterval = 0
         
         switch TaskFrequency(rawValue: task.taskFrequency) {
         case .daily:
@@ -83,21 +73,7 @@ class TaskManager {
             break
         }
         
-        completionCountThisInterval = task.completionDates.filter { date in
-            switch TaskFrequency(rawValue: task.taskFrequency) {
-            case .daily:
-                return calendar.isDate(date, inSameDayAs: now)
-            case .weekly:
-                return calendar.isDate(date, equalTo: now, toGranularity: .weekOfYear)
-            case .monthly:
-                return calendar.isDate(date, equalTo: now, toGranularity: .month)
-            case .yearly:
-                return calendar.isDate(date, equalTo: now, toGranularity: .year)
-            default:
-                return false
-            }
-        }.count
-        
+        let completionCountThisInterval = howManyCompletionsDoesRecurringTaskNeed(task: task)
         let completionsNeeded = task.interval - completionCountThisInterval
         return timeLeftInCurrentInterval <= completionsNeeded
     }

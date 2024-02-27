@@ -29,7 +29,7 @@ struct SettingsView: View {
                         Spacer()
                         Text("High")
                     }
-                    Text("Every view's title can be swiped left and right")
+                    Text("Page titles are left and right swipeable")
                 }
                 
                 Section(header: Text("Support")) {

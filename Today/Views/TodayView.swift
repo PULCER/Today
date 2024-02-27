@@ -17,7 +17,7 @@ struct TodayView: View {
             }
 
             if item.itemType == ToDoItemType.recurring.rawValue {
-                return TaskManager.shared.doesRecurringTaskNeedCompletion(task: item)
+                return TaskManager.shared.recurringTaskNeedsCompletion(task: item)
             } else {
                 return calendar.isDate(item.timestamp, inSameDayAs: Date())
             }

@@ -22,7 +22,7 @@ class TaskManager {
         }
     }
     
-    func doesRecurringTaskNeedCompletion(task: ToDoListItem) -> Bool {
+    func recurringTaskNeedsCompletion(task: ToDoListItem) -> Bool {
         let completionCount = task.completionDates.filter {
             isDateInCurrentInterval($0, forFrequency: task.taskFrequency)
         }.count

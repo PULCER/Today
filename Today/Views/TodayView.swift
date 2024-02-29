@@ -56,7 +56,7 @@ struct TodayView: View {
                             Text(item.toDoListText)
                                 .font(.title3)
                                 .bold()
-                                .foregroundColor(TaskManager.shared.isTaskUrgent(task: item) ? .red : .primary)
+                                .foregroundColor(.primary)
                             
                             if item.itemType == ToDoItemType.recurring.rawValue {
                                 let completionCount = TaskManager.shared.howManyCompletionsDoesRecurringTaskNeed(task: item)

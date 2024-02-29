@@ -45,36 +45,4 @@ class TaskManager {
             calendar.isDate(completionDate, inSameDayAs: Date())
         }
     }
-    
-    func isTaskUrgent(task: ToDoListItem) -> Bool {
-        guard task.itemType == ToDoItemType.recurring.rawValue else {
-            return false
-        }
-
-        let calendar = Calendar.current
-        let now = Date()
-        var timeLeftInCurrentInterval = 0
-        
-        switch TaskFrequency(rawValue: task.taskFrequency) {
-        case .daily:
-            timeLeftInCurrentInterval = 1
-        case .weekly:
-            let dayOfWeek = calendar.component(.weekday, from: now)
-            timeLeftInCurrentInterval = 7 - dayOfWeek
-        case .monthly:
-            let daysInMonth = calendar.range(of: .day, in: .month, for: now)?.count ?? 30
-            let dayOfMonth = calendar.component(.day, from: now)
-            timeLeftInCurrentInterval = daysInMonth - dayOfMonth
-        case .yearly:
-            let dayOfYear = calendar.ordinality(of: .day, in: .year, for: now) ?? 0
-            let daysInYear = calendar.range(of: .day, in: .year, for: now)?.count ?? 365
-            timeLeftInCurrentInterval = daysInYear - dayOfYear
-        default:
-            break
-        }
-        
-        let completionCountThisInterval = howManyCompletionsDoesRecurringTaskNeed(task: task)
-        let completionsNeeded = task.interval - completionCountThisInterval
-        return timeLeftInCurrentInterval <= completionsNeeded
-    }
 }

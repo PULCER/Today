@@ -9,23 +9,16 @@ struct TomorrowView: View {
     @State private var showingAddToDo = false
     @AppStorage("swipeSensitivity") private var swipeSensitivity: Double = 20.0 
     
-    private var tomorrowsTasks: [ToDoListItem] {
+    private var futureTasks: [ToDoListItem] {
         let calendar = Calendar.current
-        let tomorrowStart = calendar.startOfDay(for: calendar.date(byAdding: .day, value: 1, to: Date())!)
-        
-        return toDoListItems.filter { item in
-            calendar.isDate(item.timestamp, inSameDayAs: tomorrowStart)
-        }
-        .sorted { item1, item2 in
-            if item1.isCompleted && !item2.isCompleted {
-                return false
-            } else if !item1.isCompleted && item2.isCompleted {
-                return true
-            } else {
-                return item1.timestamp < item2.timestamp
+            let tomorrowStart = calendar.startOfDay(for: calendar.date(byAdding: .day, value: 1, to: Date())!)
+            
+            return toDoListItems.filter { item in
+                item.timestamp >= tomorrowStart
             }
-        }
+            .sorted(by: { $0.timestamp < $1.timestamp })
     }
+
     
     
     var body: some View {
@@ -42,11 +35,14 @@ struct TomorrowView: View {
                 })
             
             List {
-                ForEach(tomorrowsTasks) { item in
+                ForEach(futureTasks) { item in
                     HStack {
                         VStack(alignment: .leading) {
                             Text(item.toDoListText)
                                 .font(.title3)
+                            Text("\(item.timestamp, formatter: dateFormatter)") // Display the task date
+                                .font(.caption)
+                                .foregroundColor(.gray)
                         }
                         Spacer()
                         
@@ -59,6 +55,7 @@ struct TomorrowView: View {
                 }
                 .onDelete(perform: deleteItems)
             }
+
             Spacer()
             
             VStack {
@@ -141,32 +138,49 @@ struct TomorrowView: View {
     
     private func addItem() {
         withAnimation {
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "MM/dd/yyyy"
             let calendar = Calendar.current
             let tomorrow = calendar.date(byAdding: .day, value: 1, to: Date())!
+            var timestamp = tomorrow
+            var taskText = newToDoText
+
+            if let spaceIndex = newToDoText.firstIndex(of: " "),
+               let parsedDate = dateFormatter.date(from: String(newToDoText[..<spaceIndex])) {
+                timestamp = parsedDate
+                taskText = String(newToDoText[newToDoText.index(after: spaceIndex)...])
+            }
+
             let newItem = ToDoListItem(id: UUID(),
-                                       timestamp: tomorrow,
-                                       toDoListText: newToDoText,
+                                       timestamp: timestamp,
+                                       toDoListText: taskText,
                                        isCompleted: false,
                                        itemType: ToDoItemType.regular.rawValue,
                                        completionDates: [],
                                        taskFrequency: TaskFrequency.daily.rawValue,
                                        interval: 1)
             modelContext.insert(newItem)
-            newToDoText = "" 
+            newToDoText = ""
         }
     }
-    
-    
+
     private func deleteItems(offsets: IndexSet) {
         withAnimation {
             offsets.forEach { offset in
-                let idToDelete = tomorrowsTasks[offset].id
+                let idToDelete = futureTasks[offset].id
                 if let indexToDelete = toDoListItems.firstIndex(where: { $0.id == idToDelete }) {
                     let itemToDelete = toDoListItems[indexToDelete]
                     modelContext.delete(itemToDelete)
                 }
             }
         }
+    }
+    
+    private var dateFormatter: DateFormatter {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .none
+        return formatter
     }
 }
 

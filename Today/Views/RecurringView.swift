@@ -30,6 +30,13 @@ struct RecurringView: View {
         return sortedTasks
     }
 
+    private var dateFormatter: DateFormatter {
+           let formatter = DateFormatter()
+           formatter.dateStyle = .medium
+           formatter.timeStyle = .none
+           return formatter
+       }
+
 
     var body: some View {
         VStack {
@@ -48,13 +55,18 @@ struct RecurringView: View {
                 ForEach(recurringTasks) { task in
                     HStack {
                         VStack(alignment: .leading) {
-                            Text(task.toDoListText) 
+                            Text(task.toDoListText)
                                 .font(.title3)
                                 .bold()
                             
                             Text("\(intervalDescription(task.interval)) Per \(frequencyDescription(TaskFrequency(rawValue: task.taskFrequency) ?? .daily))")
                                 .font(.caption)
+
+                            Text("Completed \(task.completionDates.count) \(task.completionDates.count == 1 ? "time" : "times") since \(dateFormatter.string(from: task.timestamp))")
+                                .font(.caption)
+                                .foregroundColor(.secondary) 
                         }
+
                         
                         Spacer()
                         

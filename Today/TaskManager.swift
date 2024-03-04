@@ -15,8 +15,6 @@ class TaskManager {
             return calendar.isDate(date, equalTo: now, toGranularity: .weekOfYear)
         case .monthly:
             return calendar.isDate(date, equalTo: now, toGranularity: .month)
-        case .yearly:
-            return calendar.isDate(date, equalTo: now, toGranularity: .year)
         default:
             return false
         }

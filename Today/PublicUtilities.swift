@@ -36,8 +36,6 @@ public func frequencyDescription(_ frequency: TaskFrequency) -> String {
         return "Week"
     case .monthly:
         return "Month"
-    case .yearly:
-        return "Year"
     }
 }
 

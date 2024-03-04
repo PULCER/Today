@@ -35,5 +35,4 @@ public enum TaskFrequency: String, CaseIterable {
     case daily = "Day"
     case weekly = "Week"
     case monthly = "Month"
-    case yearly = "Year"
 }

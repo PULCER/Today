@@ -13,6 +13,12 @@ struct TimelessView: View {
         toDoListItems.filter { $0.itemType == ToDoItemType.timeless.rawValue }
                      .sorted(by: { $0.toDoListText.lowercased() < $1.toDoListText.lowercased() })
     }
+    
+    private func daysBetween(_ start: Date, _ end: Date) -> Int {
+        let calendar = Calendar.current
+        let components = calendar.dateComponents([.day], from: start, to: end)
+        return components.day ?? 0
+    }
 
     
     var body: some View {
@@ -30,9 +36,15 @@ struct TimelessView: View {
             
             List {
                 ForEach(timelessTasks) { item in
-                    Text(item.toDoListText)
-                        .font(.title3)
-                        .bold()
+                    HStack {
+                        Text(item.toDoListText)
+                            .font(.title3)
+                            .bold()
+                        Spacer()
+                        Text("\(daysBetween(item.timestamp, Date()))")
+                            .foregroundColor(.gray)
+                            .font(.title3)
+                    }
                 } .onDelete(perform: deleteItems)
             }
             

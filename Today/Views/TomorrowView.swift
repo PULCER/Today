@@ -18,8 +18,17 @@ struct TomorrowView: View {
             }
             .sorted(by: { $0.timestamp < $1.timestamp })
     }
-
     
+    private func daysUntil(_ futureDate: Date) -> Int {
+        let now = Date() 
+        return daysBetween(now, futureDate)
+    }
+
+    private func daysBetween(_ start: Date, _ end: Date) -> Int {
+        let calendar = Calendar.current
+        let components = calendar.dateComponents([.day], from: start, to: end)
+        return components.day ?? 0
+    }
     
     var body: some View {
         VStack {
@@ -40,11 +49,17 @@ struct TomorrowView: View {
                         VStack(alignment: .leading) {
                             Text(item.toDoListText)
                                 .font(.title3)
-                            Text("\(item.timestamp, formatter: dateFormatter)") // Display the task date
+                            Text("\(item.timestamp, formatter: dateFormatter)")
                                 .font(.caption)
                                 .foregroundColor(.gray)
                         }
+                    
+                        
                         Spacer()
+                        
+                        Text("\(daysBetween(Date(), item.timestamp))")
+                            .foregroundColor(.gray)
+                            .font(.title3)
                         
                         Button(action: {
                             item.isCompleted.toggle()

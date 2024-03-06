@@ -11,12 +11,18 @@ struct TomorrowView: View {
     
     private var futureTasks: [ToDoListItem] {
         let calendar = Calendar.current
-            let tomorrowStart = calendar.startOfDay(for: calendar.date(byAdding: .day, value: 1, to: Date())!)
-            
-            return toDoListItems.filter { item in
-                item.timestamp >= tomorrowStart
+        let tomorrowStart = calendar.startOfDay(for: calendar.date(byAdding: .day, value: 1, to: Date())!)
+        
+        return toDoListItems.filter { item in
+            item.timestamp >= tomorrowStart
+        }
+        .sorted { item1, item2 in
+            if item1.isCompleted == item2.isCompleted {
+                return item1.timestamp < item2.timestamp
+            } else {
+                return !item1.isCompleted
             }
-            .sorted(by: { $0.timestamp < $1.timestamp })
+        }
     }
     
     private func daysUntil(_ futureDate: Date) -> Int {

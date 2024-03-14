@@ -102,9 +102,9 @@ struct SettingsView: View {
                             
                             - **Timeless Tasks**: These tasks have no time requirements or performance monitoring. They serve as a general to-do list for items that aren't time-sensitive.
                             
-                            - **Recurring Tasks**: For tasks that occur on a regular basis, you can set a time interval for completion. These tasks will only reappear in your Today view at the start of a new interval or if they are marked as incomplete. They're highlighted in gold when completed and in red if there's a risk of not completing them within the current interval.
+                            - **Recurring Tasks**: For tasks that occur on a regular basis, you can set a time interval for completion. These tasks will only reappear in your Today view at the start of a new interval or if they are marked as incomplete. They're highlighted with a gold star when completed for that interval.
                             
-                            - **Future Tasks**: If you go to the tomorrow screen and enter a date before your task it will be saved automatically and show up in the Today view when it's time to be completed. For instance "04/15/2025 do taxes" will attach that date to the task of "do taxes"
+                            - **Future Tasks**: Any task entered here will be added for tomorrow and show up on the Today view when tomorrow comes. If you go to the tomorrow screen and enter a date before your task it will be saved automatically and show up in the Today view when it's time to be completed. For instance "04/15/2025 do taxes" will attach that date to the task of "do taxes". You can also start an input with "3 days" and then enter the task and it will save a new task for you in that number of days from today's date!
                             
                             This system allows you to focus on the present while keeping an eye on future obligations, ensuring you're always one step ahead.
                             """)

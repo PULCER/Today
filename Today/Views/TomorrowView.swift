@@ -26,8 +26,8 @@ struct TomorrowView: View {
     }
     
     private func daysUntil(_ futureDate: Date) -> Int {
-        let now = Date() 
-        return daysBetween(now, futureDate)
+        let now = Date()
+        return daysBetween(now, futureDate) + 1
     }
 
     private func daysBetween(_ start: Date, _ end: Date) -> Int {
@@ -63,9 +63,9 @@ struct TomorrowView: View {
                         
                         Spacer()
                         
-                        Text("\(daysBetween(Date(), item.timestamp))")
-                            .foregroundColor(.gray)
-                            .font(.title3)
+                        Text("\(daysUntil(item.timestamp))")
+                                                   .foregroundColor(.gray)
+                                                   .font(.title3)
                         
                         Button(action: {
                             item.isCompleted.toggle()

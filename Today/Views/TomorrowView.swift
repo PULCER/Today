@@ -159,17 +159,24 @@ struct TomorrowView: View {
     
     private func addItem() {
         withAnimation {
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "MM/dd/yyyy"
             let calendar = Calendar.current
             let tomorrow = calendar.date(byAdding: .day, value: 1, to: Date())!
             var timestamp = tomorrow
             var taskText = newToDoText
 
-            if let spaceIndex = newToDoText.firstIndex(of: " "),
-               let parsedDate = dateFormatter.date(from: String(newToDoText[..<spaceIndex])) {
-                timestamp = parsedDate
-                taskText = String(newToDoText[newToDoText.index(after: spaceIndex)...])
+            if let spaceIndex = newToDoText.firstIndex(of: " ") {
+                let daysString = String(newToDoText[..<spaceIndex])
+                if let days = Int(daysString) {
+                    timestamp = calendar.date(byAdding: .day, value: days, to: Date())!
+                    taskText = String(newToDoText[newToDoText.index(after: spaceIndex)...])
+                } else {
+                    let dateFormatter = DateFormatter()
+                    dateFormatter.dateFormat = "MM/dd/yyyy"
+                    if let parsedDate = dateFormatter.date(from: String(newToDoText[..<spaceIndex])) {
+                        timestamp = parsedDate
+                        taskText = String(newToDoText[newToDoText.index(after: spaceIndex)...])
+                    }
+                }
             }
 
             let newItem = ToDoListItem(id: UUID(),
